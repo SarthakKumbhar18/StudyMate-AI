@@ -1,0 +1,585 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>{{ question.title }} - StudyMate AI</title>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<script>
+  (function () {
+    var saved = localStorage.getItem('studymate-theme');
+    var theme = saved || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+    document.documentElement.setAttribute('data-theme', theme);
+  })();
+</script>
+
+<style>
+  :root {
+    --bg-color: #F8FAFC;
+    --card-color: #FFFFFF;
+    --text-color: #0F172A;
+    --secondary-text: #64748B;
+    --border-color: #E2E8F0;
+    --primary-color: #4F46E5;
+    --secondary-color: #6366F1;
+    --success-color: #16A34A;
+    --warning-color: #F59E0B;
+    --danger-color: #DC2626;
+    --shadow-soft: 0 1px 2px rgba(15, 23, 42, 0.04), 0 8px 24px rgba(15, 23, 42, 0.06);
+    --nav-height: 72px;
+  }
+
+  [data-theme="dark"] {
+    --bg-color: #0F172A;
+    --card-color: #1E293B;
+    --text-color: #F8FAFC;
+    --secondary-text: #94A3B8;
+    --border-color: #334155;
+    --primary-color: #6366F1;
+    --secondary-color: #818CF8;
+    --success-color: #22C55E;
+    --warning-color: #F59E0B;
+    --danger-color: #EF4444;
+    --shadow-soft: 0 1px 2px rgba(0, 0, 0, 0.2), 0 8px 28px rgba(0, 0, 0, 0.35);
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    min-height: 100vh;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    padding-top: var(--nav-height);
+  }
+
+  a { text-decoration: none; }
+  h1, h2, h3, h4, .brand-word { font-family: 'Space Grotesk', 'Inter', sans-serif; letter-spacing: -0.02em; }
+
+  /* ---------- Top nav (same as other app pages) ---------- */
+  .app-header {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    height: var(--nav-height);
+    display: flex;
+    align-items: center;
+    background-color: color-mix(in srgb, var(--bg-color) 90%, transparent);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--border-color);
+    z-index: 1000;
+  }
+  .nav-inner {
+    width: 100%;
+    max-width: 1320px;
+    margin: 0 auto;
+    padding: 0 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+  }
+  .brand { display: flex; align-items: center; gap: 10px; color: var(--text-color); flex-shrink: 0; }
+  .brand-mark {
+    width: 34px; height: 34px; border-radius: 9px;
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    display: flex; align-items: center; justify-content: center;
+    color: #fff; font-size: 18px; flex-shrink: 0;
+  }
+  .brand-word { font-weight: 700; font-size: 18px; }
+
+  .app-nav-links { display: flex; align-items: center; gap: 2px; overflow-x: auto; }
+  .app-nav-links a {
+    font-size: 14px; font-weight: 500; color: var(--secondary-text);
+    padding: 8px 13px; border-radius: 8px; white-space: nowrap;
+  }
+  .app-nav-links a:hover { background-color: color-mix(in srgb, var(--primary-color) 8%, transparent); color: var(--text-color); }
+  .app-nav-links a.active { color: var(--primary-color); background-color: color-mix(in srgb, var(--primary-color) 10%, transparent); }
+
+  .nav-right { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
+  .theme-toggle {
+    width: 38px; height: 38px; border-radius: 9px;
+    border: 1px solid var(--border-color);
+    background: var(--card-color); color: var(--text-color);
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; font-size: 16px;
+  }
+
+  .btn-logout {
+    display: flex; align-items: center; gap: 7px;
+    padding: 9px 16px;
+    border-radius: 9px;
+    border: 1px solid color-mix(in srgb, var(--danger-color) 35%, transparent);
+    background: color-mix(in srgb, var(--danger-color) 10%, transparent);
+    color: var(--danger-color);
+    font-size: 13.5px;
+    font-weight: 600;
+  }
+  .btn-logout:hover { background: color-mix(in srgb, var(--danger-color) 18%, transparent); color: var(--danger-color); }
+
+  @media (max-width: 900px) { .app-nav-links { display: none; } }
+
+  /* ---------- Page ---------- */
+  .page-wrap { max-width: 1320px; margin: 0 auto; padding: 24px 24px 60px; }
+
+  .breadcrumb-link {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-size: 13.5px; font-weight: 600; color: var(--secondary-text);
+    margin-bottom: 16px;
+    background: none; border: none; cursor: pointer;
+    font-family: 'Inter', sans-serif;
+  }
+  .breadcrumb-link:hover { color: var(--primary-color); }
+
+  .surface-card {
+    background: var(--card-color);
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    box-shadow: var(--shadow-soft);
+  }
+
+  /* ---------- Two-column problem/code layout ---------- */
+  .problem-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    align-items: start;
+  }
+
+  /* ---------- Problem column ---------- */
+  .problem-col { padding: 26px; max-height: calc(100vh - var(--nav-height) - 70px); overflow-y: auto; }
+
+  .problem-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 14px; margin-bottom: 14px; }
+  .problem-head h1 { font-size: 21px; font-weight: 700; margin: 0; }
+
+  .difficulty-badge {
+    flex-shrink: 0;
+    font-size: 11.5px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    padding: 4px 11px;
+    border-radius: 999px;
+    background: var(--bg-color);
+    color: var(--secondary-text);
+    border: 1px solid var(--border-color);
+  }
+  .difficulty-badge.level-easy { background: color-mix(in srgb, var(--success-color) 14%, transparent); color: var(--success-color); border-color: color-mix(in srgb, var(--success-color) 30%, transparent); }
+  .difficulty-badge.level-medium { background: color-mix(in srgb, var(--warning-color) 16%, transparent); color: var(--warning-color); border-color: color-mix(in srgb, var(--warning-color) 32%, transparent); }
+  .difficulty-badge.level-hard { background: color-mix(in srgb, var(--danger-color) 14%, transparent); color: var(--danger-color); border-color: color-mix(in srgb, var(--danger-color) 30%, transparent); }
+
+  .problem-col h4 {
+    font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em;
+    color: var(--secondary-text);
+    margin: 22px 0 10px;
+  }
+  .problem-col h4:first-of-type { margin-top: 20px; }
+  .problem-col p { font-size: 14.5px; line-height: 1.7; color: var(--text-color); margin: 0; white-space: pre-line; }
+
+  .example-card {
+    background: var(--bg-color);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 16px 18px;
+    margin-bottom: 14px;
+  }
+  .example-card h6 { font-size: 12.5px; font-weight: 700; color: var(--secondary-text); text-transform: uppercase; letter-spacing: 0.03em; margin: 0 0 10px; }
+  .example-card strong { font-size: 12.5px; color: var(--secondary-text); display: block; margin: 10px 0 4px; }
+  .example-card strong:first-of-type { margin-top: 0; }
+  .example-pre {
+    background: var(--card-color);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 10px 12px;
+    margin: 0;
+    font-family: 'JetBrains Mono', 'Consolas', monospace;
+    font-size: 13px;
+    color: var(--text-color);
+    white-space: pre-wrap;
+    word-break: break-word;
+  }
+
+  .examples-empty {
+    background: var(--bg-color);
+    border: 1px dashed var(--border-color);
+    border-radius: 12px;
+    padding: 20px;
+    text-align: center;
+    font-size: 13.5px;
+    color: var(--secondary-text);
+  }
+
+  /* ---------- Code column ---------- */
+  .code-col { position: sticky; top: calc(var(--nav-height) + 14px); display: flex; flex-direction: column; }
+
+  .code-card-head {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 18px 20px;
+    border-bottom: 1px solid var(--border-color);
+  }
+  .code-card-head h4 { font-size: 14.5px; font-weight: 700; margin: 0; }
+
+  .code-actions { display: flex; gap: 8px; }
+
+  .btn-run, .btn-submit {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 8px 15px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+  }
+  .btn-run {
+    background: var(--bg-color);
+    color: var(--text-color);
+    border: 1px solid var(--border-color);
+  }
+  .btn-run:hover { border-color: var(--primary-color); color: var(--primary-color); }
+
+  .btn-submit {
+    background: linear-gradient(135deg, var(--success-color), #22C55E);
+    color: #fff;
+  }
+  .btn-submit:hover { filter: brightness(1.05); }
+
+  .code-editor-wrap { padding: 16px 20px 0; }
+  .code-editor-wrap label {
+    display: block;
+    font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.03em;
+    color: var(--secondary-text);
+    margin-bottom: 8px;
+  }
+
+  #code-editor {
+    width: 100%;
+    background: var(--bg-color);
+    color: var(--text-color);
+    border: 1.5px solid var(--border-color);
+    border-radius: 10px;
+    padding: 14px;
+    font-family: 'JetBrains Mono', 'Consolas', monospace;
+    font-size: 13.5px;
+    line-height: 1.6;
+    resize: vertical;
+  }
+  #code-editor:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--primary-color) 18%, transparent);
+  }
+
+  .output-panel { margin: 16px 20px 20px; }
+  .output-panel-head {
+    font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.03em;
+    color: var(--secondary-text);
+    margin-bottom: 8px;
+    display: flex; align-items: center; gap: 6px;
+  }
+  #output-area {
+    background: var(--bg-color);
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    padding: 14px 16px;
+    min-height: 120px;
+    max-height: 260px;
+    overflow-y: auto;
+    font-family: 'JetBrains Mono', 'Consolas', monospace;
+    font-size: 13px;
+    color: var(--secondary-text);
+  }
+  .output-line { white-space: pre-wrap; word-break: break-word; padding: 1px 0; }
+  .output-line.neutral { color: var(--text-color); }
+  .output-line.pass { color: var(--success-color); }
+  .output-line.fail { color: var(--danger-color); }
+  .output-line.pass-banner { color: var(--success-color); font-weight: 700; font-size: 13.5px; margin-bottom: 4px; }
+  .output-line.fail-banner { color: var(--danger-color); font-weight: 700; font-size: 13.5px; margin-bottom: 4px; }
+  .output-line.detail { color: var(--secondary-text); padding-left: 14px; }
+
+  .back-row { margin-top: 20px; }
+  .btn-back {
+    padding: 11px 20px;
+    border-radius: 9px;
+    border: 1px solid var(--border-color);
+    background: var(--card-color);
+    color: var(--text-color);
+    font-size: 14px;
+    font-weight: 600;
+    display: inline-flex; align-items: center; gap: 8px;
+  }
+  .btn-back:hover { border-color: var(--primary-color); color: var(--primary-color); }
+
+  @media (max-width: 960px) {
+    .problem-grid { grid-template-columns: 1fr; }
+    .problem-col { max-height: none; overflow-y: visible; }
+    .code-col { position: static; }
+  }
+</style>
+</head>
+
+<body>
+
+<header class="app-header">
+  <div class="nav-inner">
+    <a href="{% url 'student_dashboard' %}" class="brand">
+      <span class="brand-mark"><i class="bi bi-mortarboard-fill"></i></span>
+      <span class="brand-word">StudyMate <span style="color: var(--primary-color);">AI</span></span>
+    </a>
+
+    <nav class="app-nav-links">
+      <a href="{% url 'student_dashboard' %}"><i class="bi bi-grid-1x2 me-1"></i> Dashboard</a>
+      <a href="{% url 'self_study' %}">Self Study</a>
+      <a href="{% url 'study_plan' %}" class="active">Study Plans</a>
+      <a href="{% url 'browse_courses' %}">Courses</a>
+      <a href="{% url 'student_profile' %}">Profile</a>
+    </nav>
+
+    <div class="nav-right">
+      <button class="theme-toggle" id="themeToggle" type="button" aria-label="Toggle dark mode">
+        <i class="bi bi-moon-stars" id="themeIcon"></i>
+      </button>
+      <a href="{% url 'logout' %}" class="btn-logout">
+        <i class="bi bi-box-arrow-right"></i> Logout
+      </a>
+    </div>
+  </div>
+</header>
+
+<div class="page-wrap">
+
+  <button type="button" class="breadcrumb-link" onclick="history.back()">
+    <i class="bi bi-arrow-left"></i> Back to Questions
+  </button>
+
+  <div class="problem-grid">
+
+    <!-- ================= PROBLEM COLUMN ================= -->
+    <div class="surface-card problem-col">
+
+      <div class="problem-head">
+        <h1>{{ question.title }}</h1>
+        <span class="difficulty-badge" data-level="{{ question.get_difficulty_display }}">{{ question.get_difficulty_display }}</span>
+      </div>
+
+      <h4>Problem</h4>
+      <p>{{ question.description }}</p>
+
+      {% if question.constraints %}
+      <h4>Constraints</h4>
+      <p>{{ question.constraints }}</p>
+      {% endif %}
+
+      <h4>Examples</h4>
+
+      {% for test_case in test_cases %}
+      <div class="example-card">
+        <h6>Example {{ forloop.counter }}</h6>
+        <strong>Input:</strong>
+        <pre class="example-pre">{{ test_case.input_data }}</pre>
+        <strong>Output:</strong>
+        <pre class="example-pre">{{ test_case.expected_output }}</pre>
+      </div>
+
+      {% empty %}
+      <div class="examples-empty">No sample test cases have been added yet.</div>
+      {% endfor %}
+
+    </div>
+
+    <!-- ================= CODE COLUMN ================= -->
+    <div class="surface-card code-col">
+
+      <div class="code-card-head">
+        <h4>Your Code</h4>
+        <div class="code-actions">
+          <button type="button" class="btn-run" id="run-button">
+            <i class="bi bi-play-fill"></i> Run
+          </button>
+          <button type="button" class="btn-submit" id="submit-button">
+            <i class="bi bi-check2-circle"></i> Submit
+          </button>
+        </div>
+      </div>
+
+      <form id="code-form">{% csrf_token %}</form>
+
+      {% if question.starter_code_python %}
+      <div class="code-editor-wrap">
+        <label>Python Code</label>
+        <textarea
+          id="code-editor"
+          rows="15"
+          spellcheck="false"
+        >
+{{ question.starter_code_python }}</textarea
+        >
+      </div>
+
+      {% elif question.starter_code_java %}
+      <div class="code-editor-wrap">
+        <label>Java Code</label>
+        <textarea
+          id="code-editor"
+          rows="15"
+          spellcheck="false"
+        >
+{{ question.starter_code_java }}</textarea
+        >
+      </div>
+      {% endif %}
+
+      <div class="output-panel">
+        <div class="output-panel-head"><i class="bi bi-terminal"></i> Output</div>
+        <div id="output-area">Output will appear here.</div>
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+<script>
+  // Theme toggle
+  var root = document.documentElement;
+  var themeToggle = document.getElementById('themeToggle');
+  var themeIcon = document.getElementById('themeIcon');
+
+  function syncThemeIcon() {
+    var isDark = root.getAttribute('data-theme') === 'dark';
+    themeIcon.className = isDark ? 'bi bi-sun' : 'bi bi-moon-stars';
+  }
+  syncThemeIcon();
+
+  themeToggle.addEventListener('click', function () {
+    var current = root.getAttribute('data-theme');
+    var next = current === 'dark' ? 'light' : 'dark';
+    root.setAttribute('data-theme', next);
+    localStorage.setItem('studymate-theme', next);
+    syncThemeIcon();
+  });
+
+  // Color the difficulty badge based on Django's get_difficulty_display text
+  document.querySelectorAll('.difficulty-badge').forEach(function (badge) {
+    var level = (badge.getAttribute('data-level') || '').toLowerCase();
+    if (level.indexOf('easy') !== -1 || level.indexOf('beginner') !== -1) {
+      badge.classList.add('level-easy');
+    } else if (level.indexOf('medium') !== -1 || level.indexOf('intermediate') !== -1) {
+      badge.classList.add('level-medium');
+    } else if (level.indexOf('hard') !== -1 || level.indexOf('advanced') !== -1 || level.indexOf('difficult') !== -1) {
+      badge.classList.add('level-hard');
+    }
+  });
+
+  const runButton = document.getElementById("run-button");
+  const submitButton = document.getElementById("submit-button");
+  const outputArea = document.getElementById("output-area");
+  const codeEditor = document.getElementById("code-editor");
+
+  // Output is built as individual styled line elements (not raw innerHTML
+  // concatenation), so server-returned text is always inserted via
+  // textContent — never parsed as HTML.
+  function clearOutput() {
+    outputArea.innerHTML = "";
+  }
+  function addLine(text, cls) {
+    var line = document.createElement("div");
+    line.className = "output-line" + (cls ? " " + cls : "");
+    line.textContent = text;
+    outputArea.appendChild(line);
+  }
+
+  runButton.addEventListener("click", function () {
+    const code = codeEditor.value;
+
+    clearOutput();
+    addLine("Running code...", "neutral");
+
+    const csrfToken = document.querySelector("[name=csrfmiddlewaretoken]").value;
+
+    const formData = new FormData();
+    formData.append("code", code);
+    formData.append("csrfmiddlewaretoken", csrfToken);
+
+    fetch("{% url 'run_code' question.id %}", {
+      method: "POST",
+      body: formData,
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        clearOutput();
+        if (data.status === "SUCCESS") {
+          addLine(data.output || "No output.", "neutral");
+        } else if (data.status === "TIMEOUT") {
+          addLine(data.error, "fail");
+        } else {
+          addLine(data.error || "Execution failed.", "fail");
+        }
+      })
+      .catch((error) => {
+        clearOutput();
+        addLine("Unable to execute the code.", "fail");
+        console.error(error);
+      });
+  });
+
+  submitButton.addEventListener("click", function () {
+    const code = codeEditor.value;
+
+    clearOutput();
+    addLine("Submitting code...", "neutral");
+
+    const csrfToken = document.querySelector("[name=csrfmiddlewaretoken]").value;
+
+    const formData = new FormData();
+    formData.append("code", code);
+    formData.append("csrfmiddlewaretoken", csrfToken);
+
+    fetch("{% url 'submit_code' question.id %}", {
+      method: "POST",
+      body: formData,
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        clearOutput();
+
+        if (data.status === "ACCEPTED") {
+          addLine("Accepted ✓", "pass-banner");
+          data.results.forEach(function (result) {
+            addLine("Test Case " + result.test_case + ": Passed ✓", "pass");
+          });
+        } else if (data.status === "WRONG") {
+          addLine("Wrong Answer", "fail-banner");
+          data.results.forEach(function (result) {
+            var isPass = /pass/i.test(result.status);
+            addLine("Test Case " + result.test_case + ": " + result.status, isPass ? "pass" : "fail");
+
+            if (result.status === "FAILED") {
+              addLine("Expected: " + result.expected, "detail");
+              addLine("Your Output: " + result.output, "detail");
+            }
+          });
+        } else {
+          addLine("Execution Error", "fail-banner");
+          data.results.forEach(function (result) {
+            addLine("Test Case " + result.test_case + ": " + result.status, "fail");
+            addLine(result.error, "detail");
+          });
+        }
+      })
+      .catch((error) => {
+        clearOutput();
+        addLine("Unable to submit the code.", "fail");
+        console.error(error);
+      });
+  });
+</script>
+
+</body>
+</html>

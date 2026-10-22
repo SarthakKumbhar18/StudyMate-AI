@@ -1,0 +1,749 @@
+{% load static %}
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Register - StudyMate AI</title>
+
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"
+      rel="stylesheet"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <script>
+      (function () {
+        var saved = localStorage.getItem("studymate-theme");
+        var theme =
+          saved ||
+          (window.matchMedia("(prefers-color-scheme: dark)").matches
+            ? "dark"
+            : "light");
+        document.documentElement.setAttribute("data-theme", theme);
+      })();
+    </script>
+
+    <style>
+      :root {
+        --bg-color: #f8fafc;
+        --card-color: #ffffff;
+        --text-color: #0f172a;
+        --secondary-text: #64748b;
+        --border-color: #e2e8f0;
+        --primary-color: #4f46e5;
+        --secondary-color: #6366f1;
+        --success-color: #16a34a;
+        --warning-color: #f59e0b;
+        --danger-color: #dc2626;
+        --shadow-soft:
+          0 1px 2px rgba(15, 23, 42, 0.04), 0 8px 24px rgba(15, 23, 42, 0.06);
+        --topbar-height: 72px;
+      }
+
+      [data-theme="dark"] {
+        --bg-color: #0f172a;
+        --card-color: #1e293b;
+        --text-color: #f8fafc;
+        --secondary-text: #94a3b8;
+        --border-color: #334155;
+        --primary-color: #6366f1;
+        --secondary-color: #818cf8;
+        --success-color: #22c55e;
+        --warning-color: #f59e0b;
+        --danger-color: #ef4444;
+        --shadow-soft:
+          0 1px 2px rgba(0, 0, 0, 0.2), 0 8px 28px rgba(0, 0, 0, 0.35);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        background-color: var(--bg-color);
+        color: var(--text-color);
+        font-family:
+          "Inter",
+          -apple-system,
+          BlinkMacSystemFont,
+          sans-serif;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      a {
+        text-decoration: none;
+      }
+
+      h1,
+      h2,
+      .brand-word {
+        font-family: "Space Grotesk", "Inter", sans-serif;
+        letter-spacing: -0.02em;
+      }
+
+      /* ---------- Top bar ---------- */
+      .auth-topbar {
+        height: var(--topbar-height);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 28px;
+        border-bottom: 1px solid var(--border-color);
+      }
+
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        color: var(--text-color);
+      }
+      .brand-mark {
+        width: 34px;
+        height: 34px;
+        border-radius: 9px;
+        background: linear-gradient(
+          135deg,
+          var(--primary-color),
+          var(--secondary-color)
+        );
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #fff;
+        font-size: 18px;
+        flex-shrink: 0;
+      }
+      .brand-word {
+        font-weight: 700;
+        font-size: 19px;
+      }
+
+      .topbar-right {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+      }
+
+      .theme-toggle {
+        width: 38px;
+        height: 38px;
+        border-radius: 9px;
+        border: 1px solid var(--border-color);
+        background: var(--card-color);
+        color: var(--text-color);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        font-size: 16px;
+      }
+
+      .topbar-login-hint {
+        font-size: 14px;
+        color: var(--secondary-text);
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .topbar-login-hint a {
+        color: var(--primary-color);
+        font-weight: 600;
+      }
+
+      /* ---------- Auth layout ---------- */
+      .auth-wrapper {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        min-height: calc(100vh - var(--topbar-height));
+      }
+
+      .auth-visual {
+        position: relative;
+        overflow: hidden;
+        background: linear-gradient(
+          160deg,
+          var(--primary-color),
+          var(--secondary-color)
+        );
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        padding: 60px;
+        color: #fff;
+      }
+
+      .auth-glow {
+        position: absolute;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.14);
+        filter: blur(50px);
+      }
+      .auth-glow.a1 {
+        width: 300px;
+        height: 300px;
+        top: -80px;
+        right: -60px;
+      }
+      .auth-glow.a2 {
+        width: 260px;
+        height: 260px;
+        bottom: -80px;
+        left: -40px;
+      }
+
+      .auth-visual-content {
+        position: relative;
+        z-index: 1;
+        max-width: 400px;
+      }
+
+      .auth-eyebrow {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 6px 14px;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.16);
+        font-size: 13px;
+        font-weight: 600;
+        margin-bottom: 22px;
+      }
+
+      .auth-visual-content h1 {
+        font-size: 32px;
+        line-height: 1.2;
+        margin: 0 0 16px;
+        font-weight: 700;
+      }
+      .auth-visual-content p.lead-text {
+        font-size: 15.5px;
+        line-height: 1.6;
+        opacity: 0.92;
+        margin: 0 0 30px;
+      }
+
+      .benefit-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+      }
+      .benefit-list li {
+        display: flex;
+        align-items: flex-start;
+        gap: 10px;
+        font-size: 14.5px;
+      }
+      .benefit-list i {
+        margin-top: 2px;
+      }
+
+      .auth-quote {
+        margin-top: 40px;
+        padding-top: 24px;
+        border-top: 1px solid rgba(255, 255, 255, 0.25);
+        font-size: 14px;
+        opacity: 0.92;
+      }
+      .auth-quote-name {
+        font-weight: 700;
+        margin-top: 8px;
+        font-size: 13px;
+      }
+
+      /* ---------- Form panel ---------- */
+      .auth-form-panel {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 48px 24px;
+      }
+
+      .auth-card {
+        width: 100%;
+        max-width: 430px;
+        background: transparent;
+        color: var(--text-color);
+      }
+
+      .auth-card h2 {
+        font-size: 26px;
+        font-weight: 700;
+        margin: 0 0 8px;
+        color: var(--text-color);
+      }
+      .auth-card .auth-subtitle {
+        font-size: 14.5px;
+        color: var(--secondary-text);
+        margin: 0 0 26px;
+      }
+
+      /* Django form.as_p output styling */
+      .auth-card form p {
+        margin: 0 0 16px;
+      }
+
+      .auth-card form label {
+        display: block;
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--secondary-text);
+        text-transform: uppercase;
+        letter-spacing: 0.03em;
+        margin-bottom: 7px;
+      }
+
+      .field-icon-wrap {
+        position: relative;
+      }
+
+      .field-icon-wrap i.field-icon {
+        position: absolute;
+        left: 14px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: var(--secondary-text);
+        font-size: 15px;
+        pointer-events: none;
+      }
+
+      .field-icon-wrap input {
+        padding-left: 40px !important;
+      }
+
+      .auth-card form input,
+      .auth-card form select,
+      .auth-card form textarea {
+        width: 100%;
+        padding: 12px 14px;
+        border-radius: 9px;
+        border: 1.5px solid var(--border-color);
+        background: var(--card-color);
+        color: var(--text-color);
+        font-family: "Inter", sans-serif;
+        font-size: 14.5px;
+        line-height: 1.3;
+        transition:
+          border-color 0.15s ease,
+          box-shadow 0.15s ease;
+      }
+
+      .auth-card form select {
+        appearance: none;
+        -webkit-appearance: none;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8' fill='none'%3E%3Cpath d='M1 1.5L6 6.5L11 1.5' stroke='%2394A3B8' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+        background-repeat: no-repeat;
+        background-position: right 14px center;
+        padding-right: 36px;
+        cursor: pointer;
+      }
+
+      .auth-card form input::placeholder {
+        color: var(--secondary-text);
+        opacity: 0.75;
+      }
+
+      .auth-card form input:focus,
+      .auth-card form select:focus,
+      .auth-card form textarea:focus {
+        outline: none;
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 3px
+          color-mix(in srgb, var(--primary-color) 18%, transparent);
+      }
+
+      .auth-card form input:focus ~ i.field-icon {
+        color: var(--primary-color);
+      }
+
+      .auth-card form .helptext {
+        display: block;
+        font-size: 12px;
+        color: var(--secondary-text);
+        margin-top: 6px;
+        line-height: 1.5;
+      }
+
+      /* Django's built-in password-rules list (plain <ul>, no class) */
+      .auth-card form p ul {
+        list-style: none;
+        padding: 0;
+        margin: 8px 0 0;
+      }
+      .auth-card form p ul li {
+        position: relative;
+        padding-left: 16px;
+        font-size: 12px;
+        line-height: 1.6;
+        color: var(--secondary-text);
+      }
+      .auth-card form p ul li::before {
+        content: "";
+        position: absolute;
+        left: 2px;
+        top: 8px;
+        width: 4px;
+        height: 4px;
+        border-radius: 50%;
+        background: var(--secondary-text);
+      }
+
+      .auth-card form ul.errorlist {
+        list-style: none;
+        padding: 0;
+        margin: 6px 0 0;
+      }
+      .auth-card form ul.errorlist li {
+        color: var(--danger-color);
+        font-size: 12.5px;
+        padding-left: 0;
+      }
+      .auth-card form ul.errorlist li::before {
+        content: none;
+      }
+
+      .auth-card form p:has(ul.errorlist) input {
+        border-color: var(--danger-color);
+      }
+
+      .password-field-wrap {
+        position: relative;
+      }
+      .password-toggle-btn {
+        position: absolute;
+        right: 10px;
+        top: 50%;
+        transform: translateY(-50%);
+        background: none;
+        border: none;
+        color: var(--secondary-text);
+        font-size: 15px;
+        cursor: pointer;
+        padding: 4px;
+        display: flex;
+      }
+      .password-field-wrap input {
+        padding-right: 40px !important;
+      }
+
+      .pw-strength-track {
+        height: 5px;
+        border-radius: 3px;
+        background: var(--border-color);
+        margin-top: 10px;
+        overflow: hidden;
+      }
+      .pw-strength-fill {
+        height: 100%;
+        width: 0%;
+        border-radius: 3px;
+        background: var(--danger-color);
+        transition:
+          width 0.2s ease,
+          background-color 0.2s ease;
+      }
+      .pw-strength-label {
+        font-size: 11.5px;
+        color: var(--secondary-text);
+        margin-top: 6px;
+        display: block;
+      }
+
+      .btn-auth-submit {
+        width: 100%;
+        padding: 12.5px;
+        border-radius: 9px;
+        border: none;
+        color: #fff;
+        font-size: 15px;
+        font-weight: 600;
+        background: linear-gradient(
+          135deg,
+          var(--primary-color),
+          var(--secondary-color)
+        );
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        margin-top: 6px;
+        box-shadow: 0 10px 22px
+          color-mix(in srgb, var(--primary-color) 32%, transparent);
+        transition:
+          transform 0.15s ease,
+          box-shadow 0.15s ease;
+      }
+      .btn-auth-submit:hover {
+        transform: translateY(-1px);
+      }
+
+      .auth-divider {
+        text-align: center;
+        margin: 22px 0;
+        font-size: 12px;
+      }
+
+      .auth-switch {
+        text-align: center;
+        font-size: 14px;
+        color: var(--secondary-text);
+        margin: 0;
+      }
+      .auth-switch a {
+        color: var(--primary-color);
+        font-weight: 600;
+      }
+
+      .mobile-login-hint {
+        display: none;
+        text-align: center;
+        margin-top: 22px;
+        font-size: 13.5px;
+        color: var(--secondary-text);
+      }
+      .mobile-login-hint a {
+        color: var(--primary-color);
+        font-weight: 600;
+      }
+
+      @media (max-width: 900px) {
+        .auth-wrapper {
+          grid-template-columns: 1fr;
+        }
+        .auth-visual {
+          display: none;
+        }
+        .topbar-login-hint {
+          display: none;
+        }
+        .mobile-login-hint {
+          display: block;
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        * {
+          transition: none !important;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <header class="auth-topbar">
+      <a href="/" class="brand">
+        <span class="brand-mark"><i class="bi bi-mortarboard-fill"></i></span>
+        <span class="brand-word"
+          >StudyMate <span style="color: var(--primary-color)">AI</span></span
+        >
+      </a>
+      <div class="topbar-right">
+        <span class="topbar-login-hint"
+          >Already have an account?
+          <a href="{% url 'login' %}">Sign in</a></span
+        >
+        <button
+          class="theme-toggle"
+          id="themeToggle"
+          type="button"
+          aria-label="Toggle dark mode"
+        >
+          <i class="bi bi-moon-stars" id="themeIcon"></i>
+        </button>
+      </div>
+    </header>
+
+    <div class="auth-wrapper">
+      <div class="auth-visual">
+        <div class="auth-glow a1"></div>
+        <div class="auth-glow a2"></div>
+        <div class="auth-visual-content">
+          <span class="auth-eyebrow"
+            ><i class="bi bi-stars"></i> Join StudyMate AI</span
+          >
+          <h1>Learning that adapts to you, from day one.</h1>
+          <p class="lead-text">
+            Create your account to get a personal study plan, an AI tutor on
+            call, and notes that organise themselves.
+          </p>
+
+          <ul class="benefit-list">
+            <li>
+              <i class="bi bi-check-circle-fill"></i> Free to get started, no
+              credit card needed
+            </li>
+            <li>
+              <i class="bi bi-check-circle-fill"></i> Works for both students
+              and tutors
+            </li>
+            <li>
+              <i class="bi bi-check-circle-fill"></i> Your progress and notes,
+              always in sync
+            </li>
+          </ul>
+
+          <div class="auth-quote">
+            "StudyMate cut my revision time in half — the AI tutor actually
+            explains things instead of just giving answers."
+            <div class="auth-quote-name">— A StudyMate AI student</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="auth-form-panel">
+        <div class="auth-card">
+          <h2>Create your account</h2>
+          <p class="auth-subtitle">
+            Start learning smarter in a couple of minutes.
+          </p>
+
+          <form method="POST" id="registerForm">
+            {% csrf_token %} {{ form.as_p }}
+
+            <button type="submit" class="btn-auth-submit">
+              Create account <i class="bi bi-arrow-right"></i>
+            </button>
+          </form>
+
+          <p class="auth-switch mobile-login-hint">
+            Already have an account? <a href="{% url 'login' %}">Sign in</a>
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // Theme toggle
+      var root = document.documentElement;
+      var themeToggle = document.getElementById("themeToggle");
+      var themeIcon = document.getElementById("themeIcon");
+
+      function syncThemeIcon() {
+        var isDark = root.getAttribute("data-theme") === "dark";
+        themeIcon.className = isDark ? "bi bi-sun" : "bi bi-moon-stars";
+      }
+      syncThemeIcon();
+
+      themeToggle.addEventListener("click", function () {
+        var current = root.getAttribute("data-theme");
+        var next = current === "dark" ? "light" : "dark";
+        root.setAttribute("data-theme", next);
+        localStorage.setItem("studymate-theme", next);
+        syncThemeIcon();
+      });
+
+      // Add a show/hide toggle to any password field the Django form renders,
+      // without touching its name/id/value so backend validation is unaffected.
+      var passwordInputs = document.querySelectorAll(
+        '#registerForm input[type="password"]',
+      );
+      passwordInputs.forEach(function (input) {
+        var wrap = document.createElement("div");
+        wrap.className = "password-field-wrap";
+        input.parentNode.insertBefore(wrap, input);
+        wrap.appendChild(input);
+
+        var btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "password-toggle-btn";
+        btn.setAttribute("aria-label", "Show password");
+        btn.innerHTML = '<i class="bi bi-eye"></i>';
+        wrap.appendChild(btn);
+
+        btn.addEventListener("click", function () {
+          var showing = input.type === "text";
+          input.type = showing ? "password" : "text";
+          btn.innerHTML = showing
+            ? '<i class="bi bi-eye"></i>'
+            : '<i class="bi bi-eye-slash"></i>';
+        });
+      });
+
+      // Left-side icon for text/email fields, based purely on input type
+      // (never touches name/id/value, so Django form processing is unaffected).
+      var iconMap = {
+        email: "bi-envelope",
+        text: "bi-person",
+        tel: "bi-telephone",
+      };
+      document
+        .querySelectorAll("#registerForm input")
+        .forEach(function (input) {
+          var iconClass = iconMap[input.type];
+          if (!iconClass) return;
+          var wrap = document.createElement("div");
+          wrap.className = "field-icon-wrap";
+          input.parentNode.insertBefore(wrap, input);
+          wrap.appendChild(input);
+          var icon = document.createElement("i");
+          icon.className = "bi " + iconClass + " field-icon";
+          wrap.appendChild(icon);
+        });
+
+      // Small live strength meter under the first password field (typically the
+      // primary "password1" field in Django's UserCreationForm). Purely visual,
+      // client-side only — it never blocks submission or touches form data.
+      if (passwordInputs.length > 0) {
+        var primaryPwd = passwordInputs[0];
+        var meterWrap = document.createElement("div");
+        meterWrap.innerHTML =
+          '<div class="pw-strength-track"><div class="pw-strength-fill" id="pwStrengthFill"></div></div>' +
+          '<span class="pw-strength-label" id="pwStrengthLabel">Password strength</span>';
+        // Insert right after the password field's wrapping <p>, before any helptext ul that follows it
+        var hostP = primaryPwd.closest("p");
+        hostP.insertBefore(
+          meterWrap,
+          hostP.querySelector("ul, .helptext") || null,
+        );
+
+        var fill = document.getElementById("pwStrengthFill");
+        var label = document.getElementById("pwStrengthLabel");
+
+        primaryPwd.addEventListener("input", function () {
+          var val = primaryPwd.value;
+          var score = 0;
+          if (val.length >= 8) score++;
+          if (val.length >= 12) score++;
+          if (/[A-Z]/.test(val) && /[a-z]/.test(val)) score++;
+          if (/[0-9]/.test(val)) score++;
+          if (/[^A-Za-z0-9]/.test(val)) score++;
+
+          var pct = val.length === 0 ? 0 : Math.min(100, (score / 5) * 100);
+          var color = "var(--danger-color)";
+          var text = "Password strength";
+
+          if (val.length > 0) {
+            if (score <= 1) {
+              color = "var(--danger-color)";
+              text = "Weak";
+            } else if (score <= 3) {
+              color = "var(--warning-color)";
+              text = "Fair";
+            } else {
+              color = "var(--success-color)";
+              text = "Strong";
+            }
+          }
+
+          fill.style.width = pct + "%";
+          fill.style.background = color;
+          label.textContent = text;
+        });
+      }
+    </script>
+  </body>
+</html>

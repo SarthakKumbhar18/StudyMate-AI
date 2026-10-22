@@ -1,0 +1,2150 @@
+{% load static %}
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>StudyMate AI — Learn faster, remember longer</title>
+
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"
+      rel="stylesheet"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <script>
+      /* Apply saved theme before paint to avoid a flash of the wrong theme */
+      (function () {
+        var saved = localStorage.getItem("studymate-theme");
+        var theme =
+          saved ||
+          (window.matchMedia("(prefers-color-scheme: dark)").matches
+            ? "dark"
+            : "light");
+        document.documentElement.setAttribute("data-theme", theme);
+      })();
+    </script>
+
+    <style>
+      :root {
+        --bg-color: #f8fafc;
+        --card-color: #ffffff;
+        --text-color: #0f172a;
+        --secondary-text: #64748b;
+        --border-color: #e2e8f0;
+        --primary-color: #4f46e5;
+        --secondary-color: #6366f1;
+        --success-color: #16a34a;
+        --warning-color: #f59e0b;
+        --danger-color: #dc2626;
+        --shadow-soft:
+          0 1px 2px rgba(15, 23, 42, 0.04), 0 8px 24px rgba(15, 23, 42, 0.06);
+        --shadow-lift:
+          0 2px 4px rgba(15, 23, 42, 0.05), 0 24px 56px rgba(79, 70, 229, 0.16);
+        --nav-height: 76px;
+      }
+
+      [data-theme="dark"] {
+        --bg-color: #0f172a;
+        --card-color: #1e293b;
+        --text-color: #f8fafc;
+        --secondary-text: #94a3b8;
+        --border-color: #334155;
+        --primary-color: #6366f1;
+        --secondary-color: #818cf8;
+        --success-color: #22c55e;
+        --warning-color: #f59e0b;
+        --danger-color: #ef4444;
+        --shadow-soft:
+          0 1px 2px rgba(0, 0, 0, 0.2), 0 8px 28px rgba(0, 0, 0, 0.35);
+        --shadow-lift:
+          0 2px 4px rgba(0, 0, 0, 0.3), 0 24px 56px rgba(0, 0, 0, 0.5);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
+        margin: 0;
+        background-color: var(--bg-color);
+        color: var(--text-color);
+        font-family:
+          "Inter",
+          -apple-system,
+          BlinkMacSystemFont,
+          sans-serif;
+        -webkit-font-smoothing: antialiased;
+        transition:
+          background-color 0.25s ease,
+          color 0.25s ease;
+        overflow-x: hidden;
+      }
+
+      h1,
+      h2,
+      h3,
+      .brand-word {
+        font-family: "Space Grotesk", "Inter", sans-serif;
+        letter-spacing: -0.02em;
+      }
+
+      a {
+        text-decoration: none;
+      }
+
+      section[id] {
+        scroll-margin-top: calc(var(--nav-height) + 12px);
+      }
+
+      /* ---------- Navbar ---------- */
+      .site-header {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: var(--nav-height);
+        display: flex;
+        align-items: center;
+        background-color: color-mix(in srgb, var(--bg-color) 88%, transparent);
+        backdrop-filter: blur(10px);
+        border-bottom: 1px solid var(--border-color);
+        z-index: 1000;
+      }
+
+      .nav-inner {
+        width: 100%;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 24px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        color: var(--text-color);
+      }
+
+      .brand-mark {
+        width: 34px;
+        height: 34px;
+        border-radius: 9px;
+        background: linear-gradient(
+          135deg,
+          var(--primary-color),
+          var(--secondary-color)
+        );
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #fff;
+        font-size: 18px;
+        flex-shrink: 0;
+      }
+
+      .brand-word {
+        font-weight: 700;
+        font-size: 19px;
+      }
+
+      .nav-links {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+      }
+
+      .nav-item {
+        position: relative;
+      }
+
+      .nav-link-btn {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        background: none;
+        border: none;
+        font-family: "Inter", sans-serif;
+        font-size: 15px;
+        font-weight: 500;
+        color: var(--text-color);
+        padding: 10px 14px;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: background-color 0.15s ease;
+      }
+
+      .nav-link-btn:hover,
+      .nav-link-btn.active {
+        background-color: color-mix(
+          in srgb,
+          var(--primary-color) 10%,
+          transparent
+        );
+        color: var(--text-color);
+      }
+
+      .nav-link-btn i.bi-chevron-down {
+        font-size: 11px;
+        transition: transform 0.15s ease;
+      }
+      .nav-item.open .nav-link-btn i.bi-chevron-down {
+        transform: rotate(180deg);
+      }
+
+      .dropdown-panel {
+        position: absolute;
+        top: calc(100% + 10px);
+        left: 0;
+        min-width: 260px;
+        background-color: var(--card-color);
+        border: 1px solid var(--border-color);
+        border-radius: 12px;
+        box-shadow: var(--shadow-soft);
+        padding: 8px;
+        opacity: 0;
+        visibility: hidden;
+        transform: translateY(-6px);
+        transition:
+          opacity 0.15s ease,
+          transform 0.15s ease,
+          visibility 0.15s;
+        z-index: 1001;
+      }
+
+      .nav-item.open .dropdown-panel {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0);
+      }
+
+      .dropdown-item-link {
+        display: flex;
+        align-items: flex-start;
+        gap: 12px;
+        padding: 10px 12px;
+        border-radius: 8px;
+        color: var(--text-color);
+      }
+
+      .dropdown-item-link:hover {
+        background-color: color-mix(
+          in srgb,
+          var(--primary-color) 8%,
+          transparent
+        );
+        color: var(--text-color);
+      }
+
+      .dropdown-item-link i {
+        font-size: 17px;
+        color: var(--primary-color);
+        margin-top: 2px;
+      }
+
+      .dropdown-item-title {
+        font-size: 14px;
+        font-weight: 600;
+      }
+      .dropdown-item-desc {
+        font-size: 12.5px;
+        color: var(--secondary-text);
+        margin-top: 1px;
+      }
+
+      .nav-right {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .theme-toggle {
+        width: 38px;
+        height: 38px;
+        border-radius: 9px;
+        border: 1px solid var(--border-color);
+        background: var(--card-color);
+        color: var(--text-color);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        font-size: 16px;
+      }
+
+      .btn-primary-solid {
+        padding: 9px 18px;
+        border-radius: 8px;
+        font-size: 14.5px;
+        font-weight: 600;
+        color: #fff;
+        background: linear-gradient(
+          135deg,
+          var(--primary-color),
+          var(--secondary-color)
+        );
+        border: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .btn-primary-solid:hover {
+        filter: brightness(1.06);
+        color: #fff;
+      }
+
+      .nav-toggle-mobile {
+        display: none;
+        width: 40px;
+        height: 40px;
+        border-radius: 9px;
+        border: 1px solid var(--border-color);
+        background: var(--card-color);
+        color: var(--text-color);
+        align-items: center;
+        justify-content: center;
+        font-size: 19px;
+      }
+
+      /* ---------- Shared buttons ---------- */
+      .btn-lg-primary {
+        padding: 14px 26px;
+        border-radius: 10px;
+        font-size: 15.5px;
+        font-weight: 600;
+        color: #fff;
+        background: linear-gradient(
+          135deg,
+          var(--primary-color),
+          var(--secondary-color)
+        );
+        border: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        box-shadow: 0 10px 24px
+          color-mix(in srgb, var(--primary-color) 35%, transparent);
+        transition:
+          transform 0.15s ease,
+          box-shadow 0.15s ease;
+      }
+      .btn-lg-primary:hover {
+        transform: translateY(-2px);
+        color: #fff;
+        box-shadow: 0 14px 28px
+          color-mix(in srgb, var(--primary-color) 40%, transparent);
+      }
+
+      .btn-lg-outline {
+        padding: 14px 24px;
+        border-radius: 10px;
+        font-size: 15.5px;
+        font-weight: 600;
+        color: var(--text-color);
+        background: var(--card-color);
+        border: 1px solid var(--border-color);
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+      }
+      .btn-lg-outline:hover {
+        border-color: var(--primary-color);
+        color: var(--text-color);
+      }
+
+      /* ---------- Hero ---------- */
+      .hero {
+        position: relative;
+        padding: calc(var(--nav-height) + 72px) 24px 80px;
+        overflow: hidden;
+      }
+
+      .hero-glow {
+        position: absolute;
+        border-radius: 50%;
+        filter: blur(70px);
+        opacity: 0.35;
+        z-index: 0;
+        pointer-events: none;
+      }
+      .hero-glow.g1 {
+        width: 420px;
+        height: 420px;
+        background: var(--primary-color);
+        top: -120px;
+        right: -80px;
+        animation: drift1 14s ease-in-out infinite;
+      }
+      .hero-glow.g2 {
+        width: 340px;
+        height: 340px;
+        background: var(--secondary-color);
+        bottom: -100px;
+        left: -60px;
+        opacity: 0.25;
+        animation: drift2 16s ease-in-out infinite;
+      }
+
+      @keyframes drift1 {
+        0%,
+        100% {
+          transform: translate(0, 0);
+        }
+        50% {
+          transform: translate(-30px, 30px);
+        }
+      }
+      @keyframes drift2 {
+        0%,
+        100% {
+          transform: translate(0, 0);
+        }
+        50% {
+          transform: translate(25px, -25px);
+        }
+      }
+
+      .hero-grid {
+        position: relative;
+        z-index: 1;
+        max-width: 1200px;
+        margin: 0 auto;
+        display: grid;
+        grid-template-columns: 1fr 1.02fr;
+        gap: 56px;
+        align-items: center;
+      }
+
+      .eyebrow-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 6px 14px;
+        border-radius: 999px;
+        background-color: color-mix(
+          in srgb,
+          var(--primary-color) 12%,
+          transparent
+        );
+        color: var(--primary-color);
+        font-size: 13px;
+        font-weight: 600;
+        margin-bottom: 20px;
+      }
+      .eyebrow-pill i {
+        font-size: 12px;
+      }
+
+      .hero-title {
+        font-size: 50px;
+        line-height: 1.08;
+        font-weight: 700;
+        margin: 0 0 20px;
+      }
+
+      .accent {
+        background: linear-gradient(
+          135deg,
+          var(--primary-color),
+          var(--secondary-color)
+        );
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+      }
+
+      .hero-sub {
+        font-size: 17.5px;
+        line-height: 1.65;
+        color: var(--secondary-text);
+        max-width: 480px;
+        margin: 0 0 32px;
+      }
+
+      .hero-cta-row {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        flex-wrap: wrap;
+        margin-bottom: 32px;
+      }
+
+      .hero-trust {
+        display: flex;
+        align-items: center;
+        gap: 22px;
+        flex-wrap: wrap;
+      }
+      .hero-trust-item {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 13.5px;
+        color: var(--secondary-text);
+        font-weight: 500;
+      }
+      .hero-trust-item i {
+        color: var(--success-color);
+      }
+
+      /* ---------- Hero visual: app preview (ordered bento) ---------- */
+      .hero-visual {
+        position: relative;
+        padding: 18px 14px;
+      }
+
+      .app-window {
+        background: var(--card-color);
+        border: 1px solid var(--border-color);
+        border-radius: 20px;
+        box-shadow: var(--shadow-lift);
+        overflow: hidden;
+      }
+
+      .aw-bar {
+        display: flex;
+        align-items: center;
+        gap: 7px;
+        padding: 12px 16px;
+        border-bottom: 1px solid var(--border-color);
+        background: color-mix(in srgb, var(--bg-color) 60%, var(--card-color));
+      }
+      .aw-dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background: var(--border-color);
+      }
+      .aw-dot.r {
+        background: #f87171;
+      }
+      .aw-dot.y {
+        background: #fbbf24;
+      }
+      .aw-dot.g {
+        background: #34d399;
+      }
+      .aw-url {
+        margin-left: 10px;
+        font-size: 11.5px;
+        color: var(--secondary-text);
+        background: var(--bg-color);
+        border: 1px solid var(--border-color);
+        border-radius: 6px;
+        padding: 3px 12px;
+      }
+
+      .aw-body {
+        padding: 16px;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 14px;
+      }
+
+      .aw-card {
+        background: var(--bg-color);
+        border: 1px solid var(--border-color);
+        border-radius: 14px;
+        padding: 14px;
+        min-width: 0;
+        opacity: 0;
+        transform: translateY(14px);
+        animation: cardIn 0.6s ease forwards;
+      }
+      .aw-card:nth-child(1) {
+        animation-delay: 0.1s;
+      }
+      .aw-card:nth-child(2) {
+        animation-delay: 0.22s;
+      }
+      .aw-card:nth-child(3) {
+        animation-delay: 0.34s;
+      }
+      .aw-card:nth-child(4) {
+        animation-delay: 0.46s;
+      }
+      .aw-card:nth-child(5) {
+        animation-delay: 0.58s;
+      }
+      .aw-card.span2 {
+        grid-column: 1 / -1;
+      }
+
+      @keyframes cardIn {
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .fc-head {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 12px;
+      }
+      .fc-icon {
+        width: 30px;
+        height: 30px;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 14px;
+        color: #fff;
+        flex-shrink: 0;
+      }
+      .fc-title {
+        font-size: 13px;
+        font-weight: 700;
+        line-height: 1.25;
+      }
+      .fc-sub {
+        font-size: 11px;
+        color: var(--secondary-text);
+      }
+      .fc-head .fc-chip {
+        margin-left: auto;
+      }
+
+      .fc-bar-track {
+        height: 6px;
+        border-radius: 4px;
+        background: var(--border-color);
+        overflow: hidden;
+      }
+      .fc-bar-fill {
+        height: 100%;
+        border-radius: 4px;
+        background: linear-gradient(
+          90deg,
+          var(--primary-color),
+          var(--secondary-color)
+        );
+      }
+
+      .fc-chip {
+        display: inline-block;
+        font-size: 10.5px;
+        font-weight: 700;
+        padding: 3px 9px;
+        border-radius: 999px;
+        white-space: nowrap;
+      }
+      .fc-chip.ok {
+        background: color-mix(in srgb, var(--success-color) 16%, transparent);
+        color: var(--success-color);
+      }
+      .fc-chip.info {
+        background: color-mix(in srgb, var(--primary-color) 14%, transparent);
+        color: var(--primary-color);
+      }
+
+      .plan-weeks {
+        display: grid;
+        grid-template-columns: repeat(6, 1fr);
+        gap: 6px;
+        margin-top: 12px;
+      }
+      .plan-week {
+        font-size: 10.5px;
+        font-weight: 600;
+        text-align: center;
+        padding: 6px 0;
+        border-radius: 8px;
+        border: 1px solid var(--border-color);
+        color: var(--secondary-text);
+        background: var(--card-color);
+      }
+      .plan-week.done {
+        background: color-mix(in srgb, var(--success-color) 14%, transparent);
+        border-color: transparent;
+        color: var(--success-color);
+      }
+      .plan-week.now {
+        background: linear-gradient(
+          135deg,
+          var(--primary-color),
+          var(--secondary-color)
+        );
+        border-color: transparent;
+        color: #fff;
+      }
+
+      .bubble {
+        font-size: 11.5px;
+        line-height: 1.45;
+        padding: 8px 10px;
+        border-radius: 10px;
+        margin-bottom: 7px;
+      }
+      .bubble.user {
+        background: color-mix(in srgb, var(--primary-color) 14%, transparent);
+        color: var(--text-color);
+        margin-left: 22px;
+        border-bottom-right-radius: 3px;
+      }
+      .bubble.ai {
+        background: var(--card-color);
+        border: 1px solid var(--border-color);
+        color: var(--secondary-text);
+        margin-right: 10px;
+        border-bottom-left-radius: 3px;
+        margin-bottom: 0;
+      }
+      .bubble.ai strong {
+        color: var(--text-color);
+      }
+
+      .quiz-score {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+      .ring {
+        --pct: 90;
+        width: 56px;
+        height: 56px;
+        border-radius: 50%;
+        background: conic-gradient(
+          var(--success-color) calc(var(--pct) * 1%),
+          var(--border-color) 0
+        );
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+      }
+      .ring span {
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+        background: var(--bg-color);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 12px;
+        font-weight: 700;
+      }
+      .quiz-meta {
+        font-size: 11.5px;
+        color: var(--secondary-text);
+        line-height: 1.5;
+      }
+      .quiz-meta strong {
+        color: var(--text-color);
+        display: block;
+        font-size: 13px;
+      }
+
+      .test-row {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 11.5px;
+        font-weight: 600;
+        padding: 7px 10px;
+        border-radius: 8px;
+        margin-bottom: 6px;
+      }
+      .test-row:last-child {
+        margin-bottom: 0;
+      }
+      .test-row.pass {
+        background: color-mix(in srgb, var(--success-color) 13%, transparent);
+        color: var(--success-color);
+      }
+      .test-row.fail {
+        background: color-mix(in srgb, var(--danger-color) 13%, transparent);
+        color: var(--danger-color);
+      }
+
+      .mini-chart {
+        display: flex;
+        align-items: flex-end;
+        gap: 6px;
+        height: 54px;
+        margin-bottom: 8px;
+      }
+      .mini-chart span {
+        flex: 1;
+        border-radius: 4px 4px 2px 2px;
+        background: color-mix(in srgb, var(--primary-color) 28%, transparent);
+      }
+      .mini-chart span.hi {
+        background: linear-gradient(
+          180deg,
+          var(--secondary-color),
+          var(--primary-color)
+        );
+      }
+      .chart-foot {
+        display: flex;
+        justify-content: space-between;
+        font-size: 11px;
+        color: var(--secondary-text);
+      }
+      .chart-foot strong {
+        color: var(--success-color);
+      }
+
+      .float-badge {
+        position: absolute;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        background: var(--card-color);
+        border: 1px solid var(--border-color);
+        border-radius: 12px;
+        box-shadow: var(--shadow-soft);
+        padding: 9px 13px;
+        font-size: 12px;
+        font-weight: 600;
+        z-index: 2;
+      }
+      .float-badge i {
+        font-size: 15px;
+      }
+      .float-badge.b1 {
+        top: -2px;
+        right: -6px;
+        animation: floatY 6s ease-in-out infinite;
+      }
+      .float-badge.b1 i {
+        color: var(--warning-color);
+      }
+      .float-badge.b2 {
+        bottom: 0;
+        left: -8px;
+        animation: floatY 7s ease-in-out infinite 0.8s;
+      }
+      .float-badge.b2 i {
+        color: var(--success-color);
+      }
+
+      @keyframes floatY {
+        0%,
+        100% {
+          transform: translateY(0);
+        }
+        50% {
+          transform: translateY(-8px);
+        }
+      }
+
+      /* ---------- Generic section ---------- */
+      .section {
+        padding: 84px 24px;
+      }
+      .section.alt {
+        background-color: color-mix(
+          in srgb,
+          var(--card-color) 55%,
+          var(--bg-color)
+        );
+        border-top: 1px solid var(--border-color);
+        border-bottom: 1px solid var(--border-color);
+      }
+      .section-inner {
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+      .section-head {
+        max-width: 620px;
+        margin: 0 auto 48px;
+        text-align: center;
+      }
+      .section-kicker {
+        display: inline-block;
+        font-size: 12.5px;
+        font-weight: 700;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        color: var(--primary-color);
+        margin-bottom: 12px;
+      }
+      .section-title {
+        font-size: 36px;
+        line-height: 1.15;
+        font-weight: 700;
+        margin: 0 0 14px;
+      }
+      .section-desc {
+        font-size: 16.5px;
+        line-height: 1.65;
+        color: var(--secondary-text);
+        margin: 0;
+      }
+
+      /* ---------- Capabilities chip strip ---------- */
+      .chip-strip {
+        padding: 0 24px 24px;
+      }
+      .chip-strip-inner {
+        max-width: 1200px;
+        margin: 0 auto;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 10px;
+      }
+      .cap-chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px 16px;
+        border-radius: 999px;
+        border: 1px solid var(--border-color);
+        background: var(--card-color);
+        font-size: 13.5px;
+        font-weight: 500;
+      }
+      .cap-chip i {
+        color: var(--primary-color);
+      }
+
+      /* ---------- Features ---------- */
+      .features-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 20px;
+      }
+      .feature-card {
+        background: var(--card-color);
+        border: 1px solid var(--border-color);
+        border-radius: 16px;
+        padding: 26px;
+        transition:
+          transform 0.15s ease,
+          box-shadow 0.15s ease,
+          border-color 0.15s ease;
+      }
+      .feature-card:hover {
+        transform: translateY(-4px);
+        box-shadow: var(--shadow-soft);
+        border-color: color-mix(
+          in srgb,
+          var(--primary-color) 40%,
+          var(--border-color)
+        );
+      }
+      .feature-icon {
+        width: 44px;
+        height: 44px;
+        border-radius: 12px;
+        background: linear-gradient(
+          135deg,
+          var(--primary-color),
+          var(--secondary-color)
+        );
+        color: #fff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 20px;
+        margin-bottom: 16px;
+      }
+      .feature-card h3 {
+        font-size: 17px;
+        margin: 0 0 8px;
+        font-weight: 600;
+      }
+      .feature-card p {
+        font-size: 14px;
+        color: var(--secondary-text);
+        margin: 0;
+        line-height: 1.6;
+      }
+
+      /* ---------- How it works ---------- */
+      .steps-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 28px;
+        position: relative;
+      }
+      .step {
+        position: relative;
+        text-align: center;
+        padding: 0 8px;
+      }
+      .step-num {
+        width: 52px;
+        height: 52px;
+        margin: 0 auto 18px;
+        border-radius: 50%;
+        background: var(--card-color);
+        border: 2px solid var(--primary-color);
+        color: var(--primary-color);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: "Space Grotesk", sans-serif;
+        font-size: 20px;
+        font-weight: 700;
+        position: relative;
+        z-index: 1;
+      }
+      .step:not(:last-child)::after {
+        content: "";
+        position: absolute;
+        top: 26px;
+        left: calc(50% + 34px);
+        width: calc(100% - 68px + 28px);
+        border-top: 2px dashed var(--border-color);
+      }
+      .step h3 {
+        font-size: 18px;
+        margin: 0 0 8px;
+        font-weight: 600;
+      }
+      .step p {
+        font-size: 14.5px;
+        color: var(--secondary-text);
+        line-height: 1.6;
+        margin: 0 auto;
+        max-width: 300px;
+      }
+
+      /* ---------- Audiences ---------- */
+      .aud-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 24px;
+      }
+      .aud-card {
+        background: var(--card-color);
+        border: 1px solid var(--border-color);
+        border-radius: 20px;
+        padding: 32px;
+        display: flex;
+        flex-direction: column;
+      }
+      .aud-tag {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        align-self: flex-start;
+        font-size: 12.5px;
+        font-weight: 700;
+        padding: 5px 12px;
+        border-radius: 999px;
+        background: color-mix(in srgb, var(--primary-color) 12%, transparent);
+        color: var(--primary-color);
+        margin-bottom: 16px;
+      }
+      .aud-card h3 {
+        font-size: 24px;
+        font-weight: 700;
+        margin: 0 0 10px;
+      }
+      .aud-card > p {
+        font-size: 15px;
+        color: var(--secondary-text);
+        line-height: 1.6;
+        margin: 0 0 20px;
+      }
+      .aud-list {
+        list-style: none;
+        padding: 0;
+        margin: 0 0 28px;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        flex: 1;
+      }
+      .aud-list li {
+        display: flex;
+        gap: 10px;
+        font-size: 14.5px;
+        line-height: 1.5;
+      }
+      .aud-list i {
+        color: var(--success-color);
+        margin-top: 2px;
+      }
+
+      /* ---------- CTA band ---------- */
+      .cta-wrap {
+        padding: 24px 24px 90px;
+      }
+      .cta-band {
+        max-width: 1200px;
+        margin: 0 auto;
+        border-radius: 24px;
+        padding: 56px 32px;
+        text-align: center;
+        color: #fff;
+        background:
+          radial-gradient(
+            circle at 15% 20%,
+            rgba(255, 255, 255, 0.18),
+            transparent 45%
+          ),
+          linear-gradient(135deg, #4f46e5, #6366f1 60%, #818cf8);
+        box-shadow: 0 24px 56px rgba(79, 70, 229, 0.3);
+      }
+      .cta-band h2 {
+        font-size: 34px;
+        font-weight: 700;
+        margin: 0 0 12px;
+      }
+      .cta-band p {
+        font-size: 16.5px;
+        opacity: 0.9;
+        margin: 0 auto 28px;
+        max-width: 520px;
+        line-height: 1.6;
+      }
+      .cta-row {
+        display: flex;
+        justify-content: center;
+        gap: 12px;
+        flex-wrap: wrap;
+      }
+      .btn-white {
+        padding: 13px 24px;
+        border-radius: 10px;
+        font-size: 15px;
+        font-weight: 600;
+        background: #fff;
+        color: #4f46e5;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .btn-white:hover {
+        color: #4338ca;
+        transform: translateY(-2px);
+      }
+      .btn-ghost-white {
+        padding: 13px 24px;
+        border-radius: 10px;
+        font-size: 15px;
+        font-weight: 600;
+        background: rgba(255, 255, 255, 0.14);
+        border: 1px solid rgba(255, 255, 255, 0.4);
+        color: #fff;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .btn-ghost-white:hover {
+        background: rgba(255, 255, 255, 0.22);
+        color: #fff;
+      }
+
+      /* ---------- Footer ---------- */
+      .site-footer {
+        background-color: var(--card-color);
+        border-top: 1px solid var(--border-color);
+        padding: 56px 24px 24px;
+      }
+      .footer-grid {
+        max-width: 1200px;
+        margin: 0 auto;
+        display: grid;
+        grid-template-columns: 1.4fr 1fr 1fr 1fr;
+        gap: 36px;
+        padding-bottom: 36px;
+        border-bottom: 1px solid var(--border-color);
+      }
+      .footer-brand-desc {
+        font-size: 13.5px;
+        color: var(--secondary-text);
+        line-height: 1.6;
+        margin: 14px 0 18px;
+        max-width: 280px;
+      }
+      .footer-socials {
+        display: flex;
+        gap: 8px;
+      }
+      .footer-social-btn {
+        width: 34px;
+        height: 34px;
+        border-radius: 8px;
+        border: 1px solid var(--border-color);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--text-color);
+        font-size: 14px;
+      }
+      .footer-social-btn:hover {
+        border-color: var(--primary-color);
+        color: var(--primary-color);
+      }
+
+      .footer-col-title {
+        font-size: 12.5px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+        color: var(--secondary-text);
+        margin-bottom: 14px;
+      }
+      .footer-link-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 11px;
+      }
+      .footer-link-list a {
+        font-size: 14px;
+        color: var(--text-color);
+      }
+      .footer-link-list a:hover {
+        color: var(--primary-color);
+      }
+
+      .footer-bottom {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding-top: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 12px;
+        font-size: 13px;
+        color: var(--secondary-text);
+      }
+
+      /* ---------- Scroll reveal ---------- */
+      .reveal {
+        opacity: 0;
+        transform: translateY(18px);
+        transition:
+          opacity 0.5s ease,
+          transform 0.5s ease;
+      }
+      .reveal.in {
+        opacity: 1;
+        transform: none;
+      }
+
+      /* ---------- Mobile menu ---------- */
+      .mobile-menu {
+        position: fixed;
+        top: var(--nav-height);
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: var(--bg-color);
+        z-index: 999;
+        padding: 20px 24px;
+        display: none;
+        overflow-y: auto;
+      }
+      .mobile-menu.open {
+        display: block;
+      }
+      .mobile-menu details {
+        border-bottom: 1px solid var(--border-color);
+        padding: 14px 0;
+      }
+      .mobile-menu summary {
+        font-weight: 600;
+        font-size: 15.5px;
+        cursor: pointer;
+        list-style: none;
+        display: flex;
+        justify-content: space-between;
+      }
+      .mobile-menu summary::-webkit-details-marker {
+        display: none;
+      }
+      .mobile-menu .mm-sub {
+        padding: 10px 0 0 4px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+      .mobile-menu .mm-sub a {
+        font-size: 14px;
+        color: var(--secondary-text);
+      }
+      .mobile-menu-cta {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        margin-top: 20px;
+      }
+
+      /* ---------- Responsive ---------- */
+      @media (max-width: 992px) {
+        .hero-grid {
+          grid-template-columns: 1fr;
+          gap: 40px;
+        }
+        .hero-visual {
+          max-width: 560px;
+          width: 100%;
+          margin: 0 auto;
+        }
+        .features-grid {
+          grid-template-columns: repeat(2, 1fr);
+        }
+        .footer-grid {
+          grid-template-columns: 1fr 1fr;
+        }
+      }
+
+      @media (max-width: 768px) {
+        .nav-links {
+          display: none;
+        }
+        .nav-toggle-mobile {
+          display: flex;
+        }
+        .btn-primary-solid.desktop-only {
+          display: none;
+        }
+        .hero {
+          padding-top: calc(var(--nav-height) + 40px);
+          padding-bottom: 56px;
+        }
+        .hero-title {
+          font-size: 36px;
+        }
+        .section {
+          padding: 60px 20px;
+        }
+        .section-title,
+        .cta-band h2 {
+          font-size: 28px;
+        }
+        .aw-body {
+          grid-template-columns: 1fr;
+        }
+        .float-badge {
+          display: none;
+        }
+        .features-grid,
+        .aud-grid {
+          grid-template-columns: 1fr;
+        }
+        .steps-grid {
+          grid-template-columns: 1fr;
+          gap: 36px;
+        }
+        .step:not(:last-child)::after {
+          display: none;
+        }
+        .footer-grid {
+          grid-template-columns: 1fr;
+          gap: 28px;
+        }
+        .cta-band {
+          padding: 40px 22px;
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .hero-glow,
+        .float-badge {
+          animation: none;
+        }
+        .aw-card {
+          animation: none;
+          opacity: 1;
+          transform: none;
+        }
+        .reveal {
+          opacity: 1;
+          transform: none;
+          transition: none;
+        }
+        html {
+          scroll-behavior: auto;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <header class="site-header">
+      <div class="nav-inner">
+        <a href="/" class="brand">
+          <span class="brand-mark"><i class="bi bi-mortarboard-fill"></i></span>
+          <span class="brand-word"
+            >StudyMate <span style="color: var(--primary-color)">AI</span></span
+          >
+        </a>
+
+        <nav class="nav-links" id="navLinks">
+          <div class="nav-item" data-dropdown="features">
+            <button class="nav-link-btn" type="button">
+              Features <i class="bi bi-chevron-down"></i>
+            </button>
+            <div class="dropdown-panel">
+              <a href="#features" class="dropdown-item-link">
+                <i class="bi bi-chat-square-text"></i>
+                <span
+                  ><span class="dropdown-item-title">AI Tutor</span><br /><span
+                    class="dropdown-item-desc"
+                    >Ask questions, get step-by-step help anytime</span
+                  ></span
+                >
+              </a>
+              <a href="#features" class="dropdown-item-link">
+                <i class="bi bi-map"></i>
+                <span
+                  ><span class="dropdown-item-title">Study Plans</span
+                  ><br /><span class="dropdown-item-desc"
+                    >Personalised schedules that adapt to you</span
+                  ></span
+                >
+              </a>
+              <a href="#features" class="dropdown-item-link">
+                <i class="bi bi-code-slash"></i>
+                <span
+                  ><span class="dropdown-item-title">Coding Practice</span
+                  ><br /><span class="dropdown-item-desc"
+                    >Run code and get instant test-case results</span
+                  ></span
+                >
+              </a>
+              <a href="#features" class="dropdown-item-link">
+                <i class="bi bi-graph-up-arrow"></i>
+                <span
+                  ><span class="dropdown-item-title">Progress Tracking</span
+                  ><br /><span class="dropdown-item-desc"
+                    >See exactly where you're improving</span
+                  ></span
+                >
+              </a>
+            </div>
+          </div>
+
+          <div class="nav-item" data-dropdown="solutions">
+            <button class="nav-link-btn" type="button">
+              Solutions <i class="bi bi-chevron-down"></i>
+            </button>
+            <div class="dropdown-panel">
+              <a href="#audiences" class="dropdown-item-link">
+                <i class="bi bi-person-workspace"></i>
+                <span
+                  ><span class="dropdown-item-title">For Students</span
+                  ><br /><span class="dropdown-item-desc"
+                    >Study smarter and track every course</span
+                  ></span
+                >
+              </a>
+              <a href="#audiences" class="dropdown-item-link">
+                <i class="bi bi-easel"></i>
+                <span
+                  ><span class="dropdown-item-title">For Tutors</span
+                  ><br /><span class="dropdown-item-desc"
+                    >Manage students and courses in one place</span
+                  ></span
+                >
+              </a>
+              <a href="#" class="dropdown-item-link">
+                <i class="bi bi-building"></i>
+                <span
+                  ><span class="dropdown-item-title">For Institutions</span
+                  ><br /><span class="dropdown-item-desc"
+                    >Bring AI learning to your classrooms</span
+                  ></span
+                >
+              </a>
+            </div>
+          </div>
+
+          <div class="nav-item" data-dropdown="resources">
+            <button class="nav-link-btn" type="button">
+              Resources <i class="bi bi-chevron-down"></i>
+            </button>
+            <div class="dropdown-panel">
+              <a href="#how" class="dropdown-item-link">
+                <i class="bi bi-signpost-split"></i>
+                <span
+                  ><span class="dropdown-item-title">How it works</span
+                  ><br /><span class="dropdown-item-desc"
+                    >From first topic to finished course</span
+                  ></span
+                >
+              </a>
+              <a href="#" class="dropdown-item-link">
+                <i class="bi bi-file-earmark-text"></i>
+                <span
+                  ><span class="dropdown-item-title">Blog</span><br /><span
+                    class="dropdown-item-desc"
+                    >Study tips and product updates</span
+                  ></span
+                >
+              </a>
+              <a href="#" class="dropdown-item-link">
+                <i class="bi bi-life-preserver"></i>
+                <span
+                  ><span class="dropdown-item-title">Help Center</span
+                  ><br /><span class="dropdown-item-desc"
+                    >Guides to get the most out of StudyMate</span
+                  ></span
+                >
+              </a>
+              <a href="#" class="dropdown-item-link">
+                <i class="bi bi-people"></i>
+                <span
+                  ><span class="dropdown-item-title">Community</span><br /><span
+                    class="dropdown-item-desc"
+                    >Connect with other learners</span
+                  ></span
+                >
+              </a>
+            </div>
+          </div>
+
+          <div class="nav-item">
+            <a href="{% url 'register' %}" class="nav-link-btn"> Sign up </a>
+          </div>
+        </nav>
+
+        <div class="nav-right">
+          <button
+            class="theme-toggle"
+            id="themeToggle"
+            type="button"
+            aria-label="Toggle dark mode"
+          >
+            <i class="bi bi-moon-stars" id="themeIcon"></i>
+          </button>
+          <a href="{% url 'login' %}" class="btn-primary-solid desktop-only">
+            Sign In <i class="bi bi-arrow-right"></i>
+          </a>
+          <button
+            class="nav-toggle-mobile"
+            id="mobileToggle"
+            type="button"
+            aria-label="Open menu"
+          >
+            <i class="bi bi-list"></i>
+          </button>
+        </div>
+      </div>
+
+      <div class="mobile-menu" id="mobileMenu">
+        <details>
+          <summary>Features <i class="bi bi-chevron-down"></i></summary>
+          <div class="mm-sub">
+            <a href="#features">AI Tutor</a>
+            <a href="#features">Study Plans</a>
+            <a href="#features">Coding Practice</a>
+            <a href="#features">Progress Tracking</a>
+          </div>
+        </details>
+        <details>
+          <summary>Solutions <i class="bi bi-chevron-down"></i></summary>
+          <div class="mm-sub">
+            <a href="#audiences">For Students</a>
+            <a href="#audiences">For Tutors</a>
+            <a href="#">For Institutions</a>
+          </div>
+        </details>
+        <details>
+          <summary>Resources <i class="bi bi-chevron-down"></i></summary>
+          <div class="mm-sub">
+            <a href="#how">How it works</a>
+            <a href="#">Blog</a>
+            <a href="#">Help Center</a>
+            <a href="#">Community</a>
+          </div>
+        </details>
+        <div class="mobile-menu-cta">
+          <a
+            href="{% url 'register' %}"
+            class="btn-lg-outline"
+            style="justify-content: center"
+            >Sign up as Student</a
+          >
+          <a
+            href="{% url 'register' %}"
+            class="btn-lg-outline"
+            style="justify-content: center"
+            >Sign up as Tutor</a
+          >
+          <a
+            href="{% url 'login' %}"
+            class="btn-primary-solid"
+            style="justify-content: center"
+            >Sign In</a
+          >
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <!-- ==================== HERO ==================== -->
+      <section class="hero">
+        <div class="hero-glow g1"></div>
+        <div class="hero-glow g2"></div>
+
+        <div class="hero-grid">
+          <div>
+            <span class="eyebrow-pill"
+              ><i class="bi bi-stars"></i> AI-powered learning platform</span
+            >
+            <h1 class="hero-title">
+              Study smarter with<br /><span class="accent">StudyMate AI</span>
+            </h1>
+            <p class="hero-sub">
+              One place to learn, practice and track progress — with an AI tutor
+              that explains, plans and quizzes you, built around how you
+              actually study.
+            </p>
+
+            <div class="hero-cta-row">
+              <a href="{% url 'register' %}" class="btn-lg-primary">
+                Get Started Free <i class="bi bi-arrow-right"></i>
+              </a>
+              <a href="#features" class="btn-lg-outline">
+                <i class="bi bi-play-circle"></i> Explore Features
+              </a>
+            </div>
+
+            <div class="hero-trust">
+              <span class="hero-trust-item"
+                ><i class="bi bi-check-circle-fill"></i> No credit card
+                required</span
+              >
+              <span class="hero-trust-item"
+                ><i class="bi bi-check-circle-fill"></i> For students &amp;
+                tutors</span
+              >
+            </div>
+          </div>
+
+          <!-- App preview: ordered bento, every card sits in a fixed grid slot -->
+          <div class="hero-visual" aria-hidden="true">
+            <div class="float-badge b1">
+              <i class="bi bi-fire"></i> 7-day study streak
+            </div>
+            <div class="float-badge b2">
+              <i class="bi bi-patch-check-fill"></i> Course unlocked
+            </div>
+
+            <div class="app-window">
+              <div class="aw-bar">
+                <span class="aw-dot r"></span>
+                <span class="aw-dot y"></span>
+                <span class="aw-dot g"></span>
+                <span class="aw-url">studymate.ai / dashboard</span>
+              </div>
+
+              <div class="aw-body">
+                <!-- 1. Study plan (full width) -->
+                <div class="aw-card span2">
+                  <div class="fc-head">
+                    <span
+                      class="fc-icon"
+                      style="background: linear-gradient(135deg, #4f46e5, #6366f1)"
+                      ><i class="bi bi-map"></i
+                    ></span>
+                    <div>
+                      <div class="fc-title">Data Structures &amp; Algorithms</div>
+                      <div class="fc-sub">Study plan · Week 3 of 6</div>
+                    </div>
+                    <span class="fc-chip info">68%</span>
+                  </div>
+                  <div class="fc-bar-track">
+                    <div class="fc-bar-fill" style="width: 68%"></div>
+                  </div>
+                  <div class="plan-weeks">
+                    <span class="plan-week done">W1</span>
+                    <span class="plan-week done">W2</span>
+                    <span class="plan-week now">W3</span>
+                    <span class="plan-week">W4</span>
+                    <span class="plan-week">W5</span>
+                    <span class="plan-week">W6</span>
+                  </div>
+                </div>
+
+                <!-- 2. AI tutor -->
+                <div class="aw-card">
+                  <div class="fc-head">
+                    <span
+                      class="fc-icon"
+                      style="background: linear-gradient(135deg, #f59e0b, #f97316)"
+                      ><i class="bi bi-chat-dots"></i
+                    ></span>
+                    <div>
+                      <div class="fc-title">AI Tutor</div>
+                      <div class="fc-sub">Ask anything</div>
+                    </div>
+                  </div>
+                  <div class="bubble user">Explain photosynthesis</div>
+                  <div class="bubble ai">
+                    <strong>Photosynthesis</strong> turns light, water and CO₂
+                    into glucose and oxygen…
+                  </div>
+                </div>
+
+                <!-- 3. Quiz result -->
+                <div class="aw-card">
+                  <div class="fc-head">
+                    <span
+                      class="fc-icon"
+                      style="background: linear-gradient(135deg, #16a34a, #22c55e)"
+                      ><i class="bi bi-patch-check"></i
+                    ></span>
+                    <div>
+                      <div class="fc-title">Quiz Result</div>
+                      <div class="fc-sub">Cell Biology</div>
+                    </div>
+                  </div>
+                  <div class="quiz-score">
+                    <div class="ring"><span>90%</span></div>
+                    <div class="quiz-meta">
+                      <strong>9 / 10 correct</strong>
+                      Great work — keep it up
+                    </div>
+                  </div>
+                </div>
+
+                <!-- 4. Coding practice -->
+                <div class="aw-card">
+                  <div class="fc-head">
+                    <span
+                      class="fc-icon"
+                      style="background: linear-gradient(135deg, #0ea5e9, #6366f1)"
+                      ><i class="bi bi-code-slash"></i
+                    ></span>
+                    <div>
+                      <div class="fc-title">Two Sum</div>
+                      <div class="fc-sub">Coding practice</div>
+                    </div>
+                  </div>
+                  <div class="test-row pass">
+                    <i class="bi bi-check-circle-fill"></i> Test case 1 · Passed
+                  </div>
+                  <div class="test-row fail">
+                    <i class="bi bi-x-circle-fill"></i> Test case 2 · Failed
+                  </div>
+                </div>
+
+                <!-- 5. Weekly progress -->
+                <div class="aw-card">
+                  <div class="fc-head">
+                    <span
+                      class="fc-icon"
+                      style="background: linear-gradient(135deg, #4f46e5, #818cf8)"
+                      ><i class="bi bi-graph-up-arrow"></i
+                    ></span>
+                    <div>
+                      <div class="fc-title">Weekly Progress</div>
+                      <div class="fc-sub">Study hours</div>
+                    </div>
+                  </div>
+                  <div class="mini-chart">
+                    <span style="height: 40%"></span>
+                    <span style="height: 55%"></span>
+                    <span style="height: 35%"></span>
+                    <span style="height: 70%"></span>
+                    <span style="height: 60%"></span>
+                    <span style="height: 85%"></span>
+                    <span class="hi" style="height: 100%"></span>
+                  </div>
+                  <div class="chart-foot">
+                    <span>Mon – Sun</span><strong>+18% retention</strong>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==================== CAPABILITY CHIPS ==================== -->
+      <div class="chip-strip">
+        <div class="chip-strip-inner">
+          <span class="cap-chip"><i class="bi bi-book"></i> Self Study</span>
+          <span class="cap-chip"><i class="bi bi-map"></i> Study Plans</span>
+          <span class="cap-chip"
+            ><i class="bi bi-collection-play"></i> Courses</span
+          >
+          <span class="cap-chip"><i class="bi bi-ui-checks"></i> Quizzes</span>
+          <span class="cap-chip"
+            ><i class="bi bi-code-slash"></i> Coding Practice</span
+          >
+          <span class="cap-chip"
+            ><i class="bi bi-shield-lock"></i> Secure Payments</span
+          >
+          <span class="cap-chip"
+            ><i class="bi bi-bar-chart-line"></i> Analytics</span
+          >
+        </div>
+      </div>
+
+      <!-- ==================== FEATURES ==================== -->
+      <section class="section" id="features">
+        <div class="section-inner">
+          <div class="section-head reveal">
+            <span class="section-kicker">Features</span>
+            <h2 class="section-title">
+              Everything you need to <span class="accent">learn and teach</span>
+            </h2>
+            <p class="section-desc">
+              From a quick question at midnight to a full paid course, StudyMate
+              AI keeps every part of learning in one place.
+            </p>
+          </div>
+
+          <div class="features-grid">
+            <div class="feature-card reveal">
+              <div class="feature-icon">
+                <i class="bi bi-chat-square-text"></i>
+              </div>
+              <h3>AI Tutor</h3>
+              <p>
+                Ask a question and get a clear, step-by-step explanation instead
+                of a page of search results.
+              </p>
+            </div>
+            <div class="feature-card reveal">
+              <div class="feature-icon"><i class="bi bi-journal-check"></i></div>
+              <h3>Self Study</h3>
+              <p>
+                Enter a topic or paste your material and get organised notes
+                plus MCQs to test yourself.
+              </p>
+            </div>
+            <div class="feature-card reveal">
+              <div class="feature-icon"><i class="bi bi-map"></i></div>
+              <h3>Study Plans</h3>
+              <p>
+                Topic-by-topic plans with practice questions, so you always know
+                what to study next.
+              </p>
+            </div>
+            <div class="feature-card reveal">
+              <div class="feature-icon">
+                <i class="bi bi-collection-play"></i>
+              </div>
+              <h3>Tutor-led Courses</h3>
+              <p>
+                Browse courses built by tutors, pay securely and learn section
+                by section with quizzes.
+              </p>
+            </div>
+            <div class="feature-card reveal">
+              <div class="feature-icon"><i class="bi bi-terminal"></i></div>
+              <h3>Coding Practice</h3>
+              <p>
+                Write code in the browser, run it, and see every test case turn
+                green or red when you submit.
+              </p>
+            </div>
+            <div class="feature-card reveal">
+              <div class="feature-icon"><i class="bi bi-graph-up-arrow"></i></div>
+              <h3>Progress Tracking</h3>
+              <p>
+                See what you've mastered and what needs another pass, at a
+                glance.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==================== HOW IT WORKS ==================== -->
+      <section class="section alt" id="how">
+        <div class="section-inner">
+          <div class="section-head reveal">
+            <span class="section-kicker">How it works</span>
+            <h2 class="section-title">Up and running in three steps</h2>
+            <p class="section-desc">
+              No setup, no clutter. Pick a role and start in minutes.
+            </p>
+          </div>
+
+          <div class="steps-grid">
+            <div class="step reveal">
+              <div class="step-num">1</div>
+              <h3>Create your account</h3>
+              <p>
+                Sign up as a student or a tutor and set up your profile in under
+                a minute.
+              </p>
+            </div>
+            <div class="step reveal">
+              <div class="step-num">2</div>
+              <h3>Learn or teach your way</h3>
+              <p>
+                Study with the AI tutor and plans, or build courses, sections
+                and quizzes for your students.
+              </p>
+            </div>
+            <div class="step reveal">
+              <div class="step-num">3</div>
+              <h3>Track real progress</h3>
+              <p>
+                Quiz scores, test results and course progress show you exactly
+                what's working.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==================== AUDIENCES ==================== -->
+      <section class="section" id="audiences">
+        <div class="section-inner">
+          <div class="section-head reveal">
+            <span class="section-kicker">Solutions</span>
+            <h2 class="section-title">Built for students and tutors</h2>
+            <p class="section-desc">
+              Two focused experiences on one platform, each with its own
+              dashboard.
+            </p>
+          </div>
+
+          <div class="aud-grid">
+            <div class="aud-card reveal" id="students">
+              <span class="aud-tag"
+                ><i class="bi bi-person-workspace"></i> For Students</span
+              >
+              <h3>Learn with a tutor that never sleeps</h3>
+              <p>
+                Everything you need to understand a topic, practise it and prove
+                you've got it.
+              </p>
+              <ul class="aud-list">
+                <li>
+                  <i class="bi bi-check-circle-fill"></i> Ask the AI tutor and
+                  get formatted, easy-to-read answers
+                </li>
+                <li>
+                  <i class="bi bi-check-circle-fill"></i> Follow study plans and
+                  practise coding questions with instant feedback
+                </li>
+                <li>
+                  <i class="bi bi-check-circle-fill"></i> Buy tutor-made courses
+                  and learn section by section
+                </li>
+              </ul>
+              <a href="{% url 'register' %}" class="btn-lg-primary"
+                >Sign up as Student <i class="bi bi-arrow-right"></i
+              ></a>
+            </div>
+
+            <div class="aud-card reveal" id="tutors">
+              <span class="aud-tag"
+                ><i class="bi bi-easel"></i> For Tutors</span
+              >
+              <h3>Turn what you know into a course</h3>
+              <p>
+                Create, organise and manage courses without wrestling with
+                tools.
+              </p>
+              <ul class="aud-list">
+                <li>
+                  <i class="bi bi-check-circle-fill"></i> Build courses with
+                  sections, quizzes and your own pricing
+                </li>
+                <li>
+                  <i class="bi bi-check-circle-fill"></i> Manage questions and
+                  keep content up to date in one place
+                </li>
+                <li>
+                  <i class="bi bi-check-circle-fill"></i> See how your students
+                  are doing with analytics
+                </li>
+              </ul>
+              <a href="{% url 'register' %}" class="btn-lg-outline"
+                >Sign up as Tutor <i class="bi bi-arrow-right"></i
+              ></a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==================== CTA ==================== -->
+      <section class="cta-wrap">
+        <div class="cta-band reveal">
+          <h2>Ready to study a little smarter?</h2>
+          <p>
+            Join StudyMate AI and turn every study session into real progress.
+          </p>
+          <div class="cta-row">
+            <a href="{% url 'register' %}" class="btn-white"
+              >Get Started Free <i class="bi bi-arrow-right"></i
+            ></a>
+            <a href="{% url 'login' %}" class="btn-ghost-white">Sign In</a>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="footer-grid">
+        <div>
+          <a href="/" class="brand">
+            <span class="brand-mark"
+              ><i class="bi bi-mortarboard-fill"></i
+            ></span>
+            <span class="brand-word">StudyMate AI</span>
+          </a>
+          <p class="footer-brand-desc">
+            An AI-powered learning platform that plans, explains and tracks your
+            study progress — for students and tutors alike.
+          </p>
+          <div class="footer-socials">
+            <a href="#" class="footer-social-btn" aria-label="Twitter"
+              ><i class="bi bi-twitter-x"></i
+            ></a>
+            <a href="#" class="footer-social-btn" aria-label="LinkedIn"
+              ><i class="bi bi-linkedin"></i
+            ></a>
+            <a href="#" class="footer-social-btn" aria-label="YouTube"
+              ><i class="bi bi-youtube"></i
+            ></a>
+            <a href="#" class="footer-social-btn" aria-label="Instagram"
+              ><i class="bi bi-instagram"></i
+            ></a>
+          </div>
+        </div>
+
+        <div>
+          <div class="footer-col-title">Product</div>
+          <ul class="footer-link-list">
+            <li><a href="#features">AI Tutor</a></li>
+            <li><a href="#features">Study Plans</a></li>
+            <li><a href="#features">Coding Practice</a></li>
+            <li><a href="#features">Progress Tracking</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <div class="footer-col-title">Company</div>
+          <ul class="footer-link-list">
+            <li><a href="#">About</a></li>
+            <li><a href="#">Blog</a></li>
+            <li><a href="#">Careers</a></li>
+            <li><a href="#">Contact</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <div class="footer-col-title">Get Started</div>
+          <ul class="footer-link-list">
+            <li><a href="{% url 'register' %}">Sign up as Student</a></li>
+            <li><a href="{% url 'register' %}">Sign up as Tutor</a></li>
+            <li><a href="{% url 'login' %}">Sign In</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <span
+          >&copy; <span id="year"></span> StudyMate AI. All rights
+          reserved.</span
+        >
+        <span>Built to help you learn a little faster, every day.</span>
+      </div>
+    </footer>
+
+    <script>
+      // Theme toggle
+      var root = document.documentElement;
+      var themeToggle = document.getElementById("themeToggle");
+      var themeIcon = document.getElementById("themeIcon");
+
+      function syncThemeIcon() {
+        var isDark = root.getAttribute("data-theme") === "dark";
+        themeIcon.className = isDark ? "bi bi-sun" : "bi bi-moon-stars";
+      }
+      syncThemeIcon();
+
+      themeToggle.addEventListener("click", function () {
+        var current = root.getAttribute("data-theme");
+        var next = current === "dark" ? "light" : "dark";
+        root.setAttribute("data-theme", next);
+        try {
+          localStorage.setItem("studymate-theme", next);
+        } catch (e) {}
+        syncThemeIcon();
+      });
+
+      // Desktop dropdowns
+      var navItems = document.querySelectorAll(".nav-item[data-dropdown]");
+      navItems.forEach(function (item) {
+        var btn = item.querySelector(".nav-link-btn");
+        btn.addEventListener("click", function (e) {
+          e.stopPropagation();
+          var isOpen = item.classList.contains("open");
+          navItems.forEach(function (i) {
+            i.classList.remove("open");
+          });
+          if (!isOpen) item.classList.add("open");
+        });
+      });
+      document.addEventListener("click", function () {
+        navItems.forEach(function (i) {
+          i.classList.remove("open");
+        });
+      });
+
+      // Mobile menu
+      var mobileToggle = document.getElementById("mobileToggle");
+      var mobileMenu = document.getElementById("mobileMenu");
+      var mobileIcon = mobileToggle.querySelector("i");
+      mobileToggle.addEventListener("click", function () {
+        mobileMenu.classList.toggle("open");
+        var isOpen = mobileMenu.classList.contains("open");
+        mobileIcon.className = isOpen ? "bi bi-x-lg" : "bi bi-list";
+      });
+      mobileMenu.querySelectorAll("a").forEach(function (a) {
+        a.addEventListener("click", function () {
+          mobileMenu.classList.remove("open");
+          mobileIcon.className = "bi bi-list";
+        });
+      });
+
+      // Scroll reveal
+      var revealEls = document.querySelectorAll(".reveal");
+      if ("IntersectionObserver" in window) {
+        var io = new IntersectionObserver(
+          function (entries) {
+            entries.forEach(function (entry) {
+              if (entry.isIntersecting) {
+                entry.target.classList.add("in");
+                io.unobserve(entry.target);
+              }
+            });
+          },
+          { threshold: 0.12 },
+        );
+        revealEls.forEach(function (el, i) {
+          el.style.transitionDelay = (i % 3) * 70 + "ms";
+          io.observe(el);
+        });
+      } else {
+        revealEls.forEach(function (el) {
+          el.classList.add("in");
+        });
+      }
+
+      document.getElementById("year").textContent = new Date().getFullYear();
+    </script>
+  </body>
+</html>

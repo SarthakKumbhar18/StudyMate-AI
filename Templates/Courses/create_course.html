@@ -1,0 +1,248 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Create Course - StudyMate AI</title>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<script>
+  (function () {
+    var saved = localStorage.getItem('studymate-theme');
+    var theme = saved || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+    document.documentElement.setAttribute('data-theme', theme);
+  })();
+</script>
+
+<style>
+  :root {
+    --bg-color: #F8FAFC; --card-color: #FFFFFF; --text-color: #0F172A; --secondary-text: #64748B;
+    --border-color: #E2E8F0; --primary-color: #4F46E5; --secondary-color: #6366F1;
+    --success-color: #16A34A; --warning-color: #F59E0B; --danger-color: #DC2626;
+    --shadow-soft: 0 1px 2px rgba(15, 23, 42, 0.04), 0 8px 24px rgba(15, 23, 42, 0.06);
+    --nav-height: 72px;
+  }
+  [data-theme="dark"] {
+    --bg-color: #0F172A; --card-color: #1E293B; --text-color: #F8FAFC; --secondary-text: #94A3B8;
+    --border-color: #334155; --primary-color: #6366F1; --secondary-color: #818CF8;
+    --success-color: #22C55E; --warning-color: #F59E0B; --danger-color: #EF4444;
+    --shadow-soft: 0 1px 2px rgba(0, 0, 0, 0.2), 0 8px 28px rgba(0, 0, 0, 0.35);
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; min-height: 100vh; background-color: var(--bg-color); color: var(--text-color);
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; -webkit-font-smoothing: antialiased;
+    padding-top: var(--nav-height);
+  }
+  a { text-decoration: none; }
+  h1, h2, h3, h4, h5, .brand-word { font-family: 'Space Grotesk', 'Inter', sans-serif; letter-spacing: -0.02em; }
+
+  .app-header {
+    position: fixed; top: 0; left: 0; right: 0; height: var(--nav-height); display: flex; align-items: center;
+    background-color: color-mix(in srgb, var(--bg-color) 90%, transparent); backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--border-color); z-index: 1000;
+  }
+  .nav-inner { width: 100%; max-width: 1240px; margin: 0 auto; padding: 0 24px; display: flex; align-items: center; justify-content: space-between; gap: 20px; }
+  .brand { display: flex; align-items: center; gap: 10px; color: var(--text-color); flex-shrink: 0; }
+  .brand-mark { width: 34px; height: 34px; border-radius: 9px; background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)); display: flex; align-items: center; justify-content: center; color: #fff; font-size: 18px; flex-shrink: 0; }
+  .brand-word { font-weight: 700; font-size: 18px; }
+  .app-nav-links { display: flex; align-items: center; gap: 2px; overflow-x: auto; }
+  .app-nav-links a { font-size: 14px; font-weight: 500; color: var(--secondary-text); padding: 8px 13px; border-radius: 8px; white-space: nowrap; }
+  .app-nav-links a:hover { background-color: color-mix(in srgb, var(--primary-color) 8%, transparent); color: var(--text-color); }
+  .app-nav-links a.active { color: var(--primary-color); background-color: color-mix(in srgb, var(--primary-color) 10%, transparent); }
+  .nav-right { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
+  .theme-toggle { width: 38px; height: 38px; border-radius: 9px; border: 1px solid var(--border-color); background: var(--card-color); color: var(--text-color); display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 16px; }
+  .btn-logout { display: flex; align-items: center; gap: 7px; padding: 9px 16px; border-radius: 9px; border: 1px solid color-mix(in srgb, var(--danger-color) 35%, transparent); background: color-mix(in srgb, var(--danger-color) 10%, transparent); color: var(--danger-color); font-size: 13.5px; font-weight: 600; }
+  .btn-logout:hover { background: color-mix(in srgb, var(--danger-color) 18%, transparent); color: var(--danger-color); }
+  @media (max-width: 1050px) { .app-nav-links { display: none; } }
+
+  .page-wrap { max-width: 1240px; margin: 0 auto; padding: 36px 24px 80px; }
+  .page-wrap.narrow { max-width: 780px; }
+  .page-wrap.medium { max-width: 960px; }
+  .page-head { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 26px; flex-wrap: wrap; }
+  .page-head h1, .page-head h2 { font-size: 26px; font-weight: 700; margin: 0 0 6px; }
+  .page-head p { font-size: 14.5px; color: var(--secondary-text); margin: 0; }
+  .page-head p strong { color: var(--text-color); }
+
+  .surface-card { background: var(--card-color); border: 1px solid var(--border-color); border-radius: 16px; box-shadow: var(--shadow-soft); }
+  .card-pad { padding: 26px; }
+  .section-title { font-size: 12.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; color: var(--secondary-text); margin: 0 0 14px; display: flex; align-items: center; gap: 7px; }
+
+  .btn-main, .btn-ghost, .btn-success-solid, .btn-danger-solid { display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 11px 20px; border-radius: 9px; font-size: 14.5px; font-weight: 600; cursor: pointer; border: none; font-family: 'Inter', sans-serif; transition: transform 0.15s ease; }
+  .btn-main { color: #fff; background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)); box-shadow: 0 8px 18px color-mix(in srgb, var(--primary-color) 30%, transparent); }
+  .btn-success-solid { color: #fff; background: linear-gradient(135deg, var(--success-color), #22C55E); box-shadow: 0 8px 18px color-mix(in srgb, var(--success-color) 28%, transparent); }
+  .btn-danger-solid { color: #fff; background: linear-gradient(135deg, var(--danger-color), #EF4444); box-shadow: 0 8px 18px color-mix(in srgb, var(--danger-color) 28%, transparent); }
+  .btn-main:hover, .btn-success-solid:hover, .btn-danger-solid:hover { transform: translateY(-1px); color: #fff; }
+  .btn-ghost { background: var(--card-color); color: var(--text-color); border: 1px solid var(--border-color); }
+  .btn-ghost:hover { border-color: var(--primary-color); color: var(--primary-color); }
+  .btn-sm { padding: 7px 13px; font-size: 12.5px; border-radius: 8px; border: 1.5px solid; background: transparent; display: inline-flex; align-items: center; gap: 6px; font-weight: 600; }
+  .btn-sm.primary { color: var(--primary-color); border-color: var(--primary-color); }
+  .btn-sm.primary:hover { background: color-mix(in srgb, var(--primary-color) 8%, transparent); color: var(--primary-color); }
+  .btn-sm.danger { color: var(--danger-color); border-color: var(--danger-color); }
+  .btn-sm.danger:hover { background: color-mix(in srgb, var(--danger-color) 8%, transparent); color: var(--danger-color); }
+  .btn-sm.success { color: var(--success-color); border-color: var(--success-color); }
+  .btn-sm.success:hover { background: color-mix(in srgb, var(--success-color) 8%, transparent); color: var(--success-color); }
+
+  .pill { display: inline-flex; align-items: center; gap: 5px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.03em; padding: 4px 11px; border-radius: 999px; background: var(--bg-color); color: var(--secondary-text); border: 1px solid var(--border-color); }
+  .pill.success { background: color-mix(in srgb, var(--success-color) 14%, transparent); color: var(--success-color); border-color: transparent; }
+  .pill.warning { background: color-mix(in srgb, var(--warning-color) 16%, transparent); color: var(--warning-color); border-color: transparent; }
+  .pill.primary { background: color-mix(in srgb, var(--primary-color) 12%, transparent); color: var(--primary-color); border-color: transparent; }
+  .pill.danger { background: color-mix(in srgb, var(--danger-color) 14%, transparent); color: var(--danger-color); border-color: transparent; }
+
+  .note { display: flex; align-items: flex-start; gap: 10px; padding: 13px 16px; border-radius: 10px; font-size: 13.5px; border: 1px solid; margin-bottom: 16px; line-height: 1.5; }
+  .note i { margin-top: 2px; }
+  .note.success { background: color-mix(in srgb, var(--success-color) 12%, transparent); color: var(--success-color); border-color: color-mix(in srgb, var(--success-color) 30%, transparent); }
+  .note.warning { background: color-mix(in srgb, var(--warning-color) 14%, transparent); color: var(--warning-color); border-color: color-mix(in srgb, var(--warning-color) 34%, transparent); }
+  .note.neutral { background: var(--bg-color); color: var(--secondary-text); border-color: var(--border-color); }
+
+  .empty-state { background: var(--card-color); border: 1px dashed var(--border-color); border-radius: 16px; padding: 56px 24px; text-align: center; }
+  .empty-state i { font-size: 38px; color: var(--primary-color); opacity: 0.5; margin-bottom: 14px; display: block; }
+  .empty-state h4 { font-size: 17px; margin: 0 0 8px; }
+  .empty-state p { font-size: 14px; color: var(--secondary-text); margin: 0 0 20px; }
+  .empty-state.compact { padding: 36px 20px; }
+  .empty-state.compact p { margin: 0; }
+
+  .form-card { padding: 28px; }
+  .field { margin-bottom: 20px; }
+  .field > label, .field > .label { display: block; font-size: 12.5px; font-weight: 600; color: var(--secondary-text); text-transform: uppercase; letter-spacing: 0.03em; margin-bottom: 7px; }
+  .field input[type="text"], .field input[type="number"], .field select, .field textarea {
+    width: 100%; padding: 11px 14px; border-radius: 9px; border: 1.5px solid var(--border-color);
+    background: var(--bg-color); color: var(--text-color); font-family: 'Inter', sans-serif; font-size: 14.5px;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  }
+  .field textarea { resize: vertical; line-height: 1.6; }
+  .field input::placeholder, .field textarea::placeholder { color: var(--secondary-text); opacity: 0.7; }
+  .field input:focus, .field select:focus, .field textarea:focus { outline: none; border-color: var(--primary-color); box-shadow: 0 0 0 3px color-mix(in srgb, var(--primary-color) 18%, transparent); }
+  .field select { appearance: none; -webkit-appearance: none; cursor: pointer; padding-right: 36px; background-repeat: no-repeat; background-position: right 14px center;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8' fill='none'%3E%3Cpath d='M1 1.5L6 6.5L11 1.5' stroke='%2394A3B8' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E"); }
+  .field input[type="file"] { width: 100%; padding: 10px; border: 1.5px dashed var(--border-color); border-radius: 10px; background: var(--bg-color); color: var(--text-color); font-size: 13.5px; }
+  .field input[type="file"]::file-selector-button { padding: 7px 14px; margin-right: 12px; border-radius: 7px; border: 1px solid var(--border-color); background: var(--card-color); color: var(--text-color); font-size: 13px; font-weight: 600; cursor: pointer; }
+  .field input[type="file"]::file-selector-button:hover { border-color: var(--primary-color); color: var(--primary-color); }
+  .field .hint { font-size: 12px; color: var(--secondary-text); margin-top: 7px; }
+  .field-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0 18px; }
+  .field-grid .span-2 { grid-column: 1 / -1; }
+  .form-section-title { display: flex; align-items: center; gap: 8px; font-size: 15px; font-weight: 700; margin: 8px 0 18px; padding-top: 22px; border-top: 1px solid var(--border-color); font-family: 'Space Grotesk', 'Inter', sans-serif; }
+  .form-section-title i { color: var(--primary-color); }
+  .opt-letter { display: inline-flex; width: 18px; height: 18px; border-radius: 5px; align-items: center; justify-content: center; background: color-mix(in srgb, var(--primary-color) 14%, transparent); color: var(--primary-color); font-size: 11px; margin-right: 6px; vertical-align: middle; }
+  .form-actions { display: flex; align-items: center; gap: 12px; margin-top: 8px; flex-wrap: wrap; }
+  .current-file { display: flex; align-items: center; gap: 10px; padding: 11px 14px; border: 1px solid var(--border-color); border-radius: 10px; background: var(--bg-color); font-size: 13.5px; margin-bottom: 12px; }
+  .current-file i { color: var(--primary-color); font-size: 17px; }
+  .current-file span { color: var(--secondary-text); font-size: 12px; text-transform: uppercase; letter-spacing: 0.03em; font-weight: 700; }
+  .current-file a { color: var(--primary-color); font-weight: 600; margin-left: auto; }
+  @media (max-width: 600px) { .field-grid { grid-template-columns: 1fr; } }
+</style>
+</head>
+
+<body>
+
+<header class="app-header">
+  <div class="nav-inner">
+    <a href="/" class="brand">
+      <span class="brand-mark"><i class="bi bi-mortarboard-fill"></i></span>
+      <span class="brand-word">StudyMate <span style="color: var(--primary-color);">AI</span></span>
+    </a>
+
+    <nav class="app-nav-links">
+      <a href="{% url 'tutor_dashboard' %}"><i class="bi bi-grid-1x2 me-1"></i> Dashboard</a>
+      <a href="{% url 'my_courses' %}">My Courses</a>
+      <a href="{% url 'create_course' %}" class="active">Create Course</a>
+    </nav>
+
+    <div class="nav-right">
+      <button class="theme-toggle" id="themeToggle" type="button" aria-label="Toggle dark mode">
+        <i class="bi bi-moon-stars" id="themeIcon"></i>
+      </button>
+      <a href="{% url 'logout' %}" class="btn-logout">
+        <i class="bi bi-box-arrow-right"></i> Logout
+      </a>
+    </div>
+  </div>
+</header>
+
+
+<div class="page-wrap narrow">
+  <div class="page-head">
+    <div>
+      <h1>Create Course</h1>
+      <p>Set up the basics now — you can add sections and quizzes after.</p>
+    </div>
+  </div>
+
+  <div class="surface-card form-card">
+    <form method="POST" enctype="multipart/form-data">
+      {% csrf_token %}
+
+      <div class="field">
+        <label for="course_title">Course Title</label>
+        <input type="text" name="title" id="course_title" placeholder="Enter course title" required>
+      </div>
+
+      <div class="field">
+        <label for="course_description">Description</label>
+        <textarea name="description" id="course_description" rows="5" placeholder="Describe your course" required></textarea>
+      </div>
+
+      <div class="field-grid">
+        <div class="field">
+          <label for="course_category">Category</label>
+          <input type="text" name="category" id="course_category" placeholder="Example: Programming" required>
+        </div>
+
+        <div class="field">
+          <label for="course_level">Level</label>
+          <select name="level" id="course_level" required>
+            <option value="">Select Level</option>
+            <option value="BEGINNER">Beginner</option>
+            <option value="INTERMEDIATE">Intermediate</option>
+            <option value="ADVANCED">Advanced</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="course_price">Price (₹)</label>
+          <input type="number" name="price" id="course_price" placeholder="Enter course price" min="0" step="0.01" required>
+        </div>
+
+        <div class="field">
+          <label for="course_thumbnail">Course Thumbnail</label>
+          <input type="file" name="thumbnail" id="course_thumbnail" accept="image/*">
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="course_learn">What You'll Learn</label>
+        <textarea name="what_you_learn" id="course_learn" rows="5" placeholder="Enter what students will learn"></textarea>
+      </div>
+
+      <div class="form-actions">
+        <button type="submit" class="btn-main"><i class="bi bi-check2"></i> Create Course</button>
+        <a href="{% url 'my_courses' %}" class="btn-ghost">Cancel</a>
+      </div>
+    </form>
+  </div>
+</div>
+
+
+<script>
+  var root = document.documentElement;
+  var themeToggle = document.getElementById('themeToggle');
+  var themeIcon = document.getElementById('themeIcon');
+  function syncThemeIcon() {
+    var isDark = root.getAttribute('data-theme') === 'dark';
+    themeIcon.className = isDark ? 'bi bi-sun' : 'bi bi-moon-stars';
+  }
+  syncThemeIcon();
+  themeToggle.addEventListener('click', function () {
+    var next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+    root.setAttribute('data-theme', next);
+    localStorage.setItem('studymate-theme', next);
+    syncThemeIcon();
+  });
+</script>
+
+</body>
+</html>
